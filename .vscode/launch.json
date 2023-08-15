@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-StoreBackEndApplication<StoreBackEnd>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "ro.store.admin.StoreBackEndApplication",
+      "projectName": "StoreBackEnd",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
