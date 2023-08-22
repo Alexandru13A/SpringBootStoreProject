@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://org.thymeleaf.org">
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<title>Login - Store Admin</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+
+
+
+</head>
+
+<body>
+
+
+
+
+	<div class="container-fluid text-center">
+
+		<div>
+			<img th:src="@{/images/site/logostore.png}"
+				style="max-width: 200px; max-height: 200px; border-radius:30px;margin-bottom: 30px;margin-top: 30px;">
+		</div>
+
+		<form th:action="@{/login}" method="post" style="max-width: 350px; margin:0 auto">
+			<div th:if="${param.error}">
+					<p class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p>
+			</div>
+
+			<div th:if="${param.logout}">
+				<p class="text-warning">You have been Logged out</p>
+			</div>
+
+			<div class="border border-secondary rounded p-3">
+				<p>
+					Access to Store Control Panel
+				</p>
+				<p>
+					<input name="email" type="email" class="form-control" placeholder="Email" required />
+				</p>
+				<p>
+					<input name="password" type="password" class="form-control" placeholder="Password" required />
+				</p>
+					
+					<p>
+							<input type="checkbox" name="remember-me"/>&nbsp; Remember Me 
+					</p>
+				<p>
+					<input type="submit" value="Login" class="btn btn-primary" />
+				</p>
+			</div>
+		</form>
+
+		<div>
+			<p style="text-align: center;">Store Control Panel - Copyright &COPY; Store </p>
+		</div>
+
+	</div>
+
+
+
+</body>
+
+</html>

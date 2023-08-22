@@ -27,29 +27,36 @@ public class UserService {
 		this.roleRepo = roleRepo;
 		this.passwordEncoder = passwordEncoder;
 	}
+	//GET BY EMAIL
+	public User getUserByEmail(String email) {
+		return userRepo.getUserByEmail(email);
+	}
 
+	//GET ALL USERS
 	public List<User> usersList() {
 		return userRepo.findAll();
 	}
-	
-	public Page<User> listByPage(int pageNum,String sortField,String sortOrder,String keyword){
+
+	//LIST USERS BY PAGE
+	public Page<User> listByPage(int pageNum, String sortField, String sortOrder, String keyword) {
 		Sort sort = Sort.by(sortField);
-		
+
 		sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
-		
-		PageRequest pageable = PageRequest.of(pageNum-1, USERS_PER_PAGE,sort);
-		
-		
-		if(keyword != null) {
-			return userRepo.findAll(keyword,pageable);
+
+		PageRequest pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
+
+		if (keyword != null) {
+			return userRepo.findAll(keyword, pageable);
 		}
 		return userRepo.findAll(pageable);
 	}
 
+	//GET ALL ROLES
 	public List<Role> rolesList() {
 		return roleRepo.findAll();
 	}
 
+	//SAVE USER
 	public User saveUser(User user) {
 		boolean isUpdatingUser = (user.getId() != null);
 
@@ -64,15 +71,32 @@ public class UserService {
 		} else {
 			encodePassword(user);
 		}
-
-	return	userRepo.save(user);
+		return userRepo.save(user);
 	}
 
+	//UPDATE ACCOUNT INFORMATIONS
+	public User updateAccount(User userInForm) {
+		User userFromDB = userRepo.findById(userInForm.getId()).get();
+
+		if (!userInForm.getPassword().isEmpty()) {
+			userFromDB.setPassword(userInForm.getPassword());
+			encodePassword(userFromDB);
+		}
+		if (userInForm.getPhoto() != null) {
+			userFromDB.setPhoto(userInForm.getPhoto());
+		}
+		userFromDB.setFirstName(userInForm.getFirstName());
+		userFromDB.setLastName(userInForm.getLastName());
+		return userRepo.save(userFromDB);
+	}
+
+	//PASSWORD ENCODER
 	private void encodePassword(User user) {
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
 	}
 
+	//CHECK  EMAIL TO BE UNIQUE
 	public boolean checkForUniqueEmail(Integer id, String email) {
 		User userByEmail = userRepo.getUserByEmail(email);
 
@@ -93,6 +117,7 @@ public class UserService {
 
 	}
 
+	//GET USER BY ID
 	public User getUserById(Integer id) throws UserNotFoundException {
 		try {
 			return userRepo.findById(id).get();
@@ -101,6 +126,7 @@ public class UserService {
 		}
 	}
 
+	//DELETE USER
 	public void delete(Integer id) throws UserNotFoundException {
 		Long countById = userRepo.countById(id);
 
@@ -110,6 +136,7 @@ public class UserService {
 		userRepo.deleteById(id);
 	}
 
+	//UPDATE USER STATUS
 	public void updateStatus(Integer id, boolean enabled) {
 		userRepo.updateStatus(id, enabled);
 	}

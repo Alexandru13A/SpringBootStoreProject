@@ -1,6 +1,6 @@
 package ro.store.admin.user.test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 
@@ -90,7 +90,7 @@ public class UserRepositoryTest {
 
 	@Test
 	public void deleteUserTest() {
-		Integer userId = 1;
+		Integer userId = 2;
 		repo.deleteById(userId);
 
 		repo.findById(userId);

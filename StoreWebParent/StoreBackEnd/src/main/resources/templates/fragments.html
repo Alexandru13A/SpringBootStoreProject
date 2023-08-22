@@ -1,14 +1,25 @@
 <!DOCTYPE html>
-<html xmlns:th="http://org.thymeleaf.org">
+<html xmlns:th="http://org.thymeleaf.org" xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
-<head>
-	<meta charset="ISO-8859-1">
-	<title>Insert title here</title>
+<head th:fragment="page_head(title)">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+
+	<title>[[${title}]]</title>
+
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<link rel="stylesheet" th:href="@{/css/navbar.css}" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+		integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
 
-	<th th:fragment="column_link(fieldName,columnLabel)">
+	<th th:fragment="users_column_link(fieldName,columnLabel)">
 		<a class="text-white"
 			th:href="@{'/users/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword :''}}">
 			[[${columnLabel}]]
@@ -17,10 +28,27 @@
 		</span>
 
 	</th>
+	<th th:fragment="categories_column_link(fieldName,columnLabel)">
+		<a class="text-white"
+			th:href="@{'/categories/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword :''}}">
+			[[${columnLabel}]]
+		</a>
+		<span th:if="${sortField == fieldName}" th:class="${sortOrder =='asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
+		</span>
+
+	</th>
 
 
-	<a th:fragment="page_link(pageNum,label)" class="page-link"
+	<a th:fragment="users_page_link(pageNum,label)" class="page-link"
 		th:href="@{'/users/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
+
+	<a th:fragment="categories_page_link(pageNum,label)" class="page-link"
+		th:href="@{'/categories/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
+
+
+		<div th:fragment="footer" class="text-center m-3">
+			<p style="text-align: center;">Store Control Panel - Copyright &COPY; Store </p>
+		</div>
 
 </body>
 
