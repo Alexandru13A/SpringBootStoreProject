@@ -120,38 +120,38 @@ public class CategoryService {
   // CATEGORY LIST
   public List<Category> listCategoriesUsedInForm() {
     List<Category> categoriesUsedInForm = new ArrayList<>();
-    Iterable<Category> categoriesFromDB = repository.findAll();
+    Iterable<Category> categories = repository.findAll();
 
-    for (Category category : categoriesFromDB) {
+    for (Category category : categories) {
       if (category.getParent() == null) {
-        categoriesUsedInForm.add(Category.copyIdAndName(category));
-
+     categoriesUsedInForm.add(Category.copyIdAndName(category));
         Set<Category> children = category.getChildren();
-        for (Category subCategory : children) {
-          String name = "--" + subCategory.getName();
-          categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(),name));
-          listSubcategoriesUsedInForm(categoriesUsedInForm, subCategory, 1);
-        }
 
+        for (Category subCategory : children) {
+         String name = "--" +subCategory.getName();
+          categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
+          listChildren(categoriesUsedInForm,subCategory, 1);
+        }
       }
     }
-
     return categoriesUsedInForm;
-  }
+    }
 
-  private void listSubcategoriesUsedInForm(List<Category> categoriesUsedInForm, Category parent, int subLevel) {
+  
+
+  private void listChildren( List<Category> categoriesUsedInForm,Category parent, int subLevel) {
     int newSubLevel = subLevel + 1;
     Set<Category> children = parent.getChildren();
 
     for (Category subCategory : children) {
-      String name = " ";
+      String name = "";
       for (int i = 0; i < newSubLevel; i++) {
-        name += "--";
+        name += "--" ;
       }
       name += subCategory.getName();
-      categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(), name));
+      categoriesUsedInForm.add(Category.copyIdAndName(subCategory.getId(),name));
 
-      listSubcategoriesUsedInForm(categoriesUsedInForm, subCategory, newSubLevel);
+      listChildren(categoriesUsedInForm,subCategory, newSubLevel);
     }
   }
 

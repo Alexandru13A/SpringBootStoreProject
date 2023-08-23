@@ -59,7 +59,7 @@ public class Category {
   public static Category copyIdAndName(Integer id , String name) {
     Category copyCategory = new Category();
     copyCategory.setId(id);
-    copyCategory.setImage(name);
+    copyCategory.setName(name);
     return copyCategory;
   }
 
