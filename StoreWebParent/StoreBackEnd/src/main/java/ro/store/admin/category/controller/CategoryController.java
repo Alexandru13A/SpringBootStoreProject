@@ -3,7 +3,6 @@ package ro.store.admin.category.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ro.store.admin.category.CategoryNotFoundException;
 import ro.store.admin.category.CategoryService;
+import ro.store.admin.category.util.CategoryPageInfo;
 import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.common.entity.Category;
 
@@ -30,44 +30,47 @@ public class CategoryController {
   }
 
   @GetMapping("/categories")
-  public String getAllCategories(Model model) {
-    List<Category> categories = service.getAllCategories();
-    model.addAttribute("categories", categories);
-    return "/categories/categories";
+  public String getAllCategories(@Param("sortOrder")String sortOrder,Model model) {
+    return listByPage(1,sortOrder,null,model);
   }
 
-  // LIST BY PAGE
   @GetMapping("/categories/page/{pageNum}")
-  public String listCategoriesByPage(@PathVariable("pageNum") int pageNum, Model model,
-      @Param("sortField") String sortField,
-      @Param("sortOrder") String sortOrder, @Param("keyword") String keyword) {
+  public String listByPage(@PathVariable(name = "pageNum")int pageNum,@Param("sortOrder")String sortOrder,
+  @Param("keyword")String keyword,Model model){
+     if(sortOrder == null || sortOrder.isEmpty()){
+      sortOrder = "asc";
+    }
+    CategoryPageInfo pageInfo = new CategoryPageInfo();
+    List<Category> categories = service.listByPage(pageInfo,pageNum,sortOrder,keyword);
 
-    Page<Category> page = service.categoryListingByPage(pageNum, sortField, sortOrder, keyword);
-    List<Category> categories = page.getContent();
 
     long startCount = (pageNum - 1) * CategoryService.CATEGORIES_PER_PAGE + 1;
-    long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
+		long endCount = startCount + CategoryService.CATEGORIES_PER_PAGE - 1;
 
-    if (endCount > page.getTotalElements()) {
-      endCount = page.getTotalElements();
-    }
+		if (endCount > pageInfo.getTotalElements()) {
+			endCount = pageInfo.getTotalElements();
+		}
 
     String reverseSortOrder = sortOrder.equals("asc") ? "desc" : "asc";
 
-    model.addAttribute("currentPage", pageNum);
-    model.addAttribute("totalPages", page.getTotalPages());
+    model.addAttribute("totalPages", pageInfo.getTotalPages());
+    model.addAttribute("totalItems", pageInfo.getTotalElements());
     model.addAttribute("startCount", startCount);
-    model.addAttribute("endCount", endCount);
-    model.addAttribute("totalItems", page.getTotalElements());
-    model.addAttribute("categories", categories);
-    model.addAttribute("sortField", sortField);
+		model.addAttribute("endCount", endCount);
+    model.addAttribute("currentPage", pageNum);
+    model.addAttribute("sortField", "name");
     model.addAttribute("sortOrder", sortOrder);
     model.addAttribute("keyword", keyword);
+    
+    model.addAttribute("categories", categories);
     model.addAttribute("reverseSortOrder", reverseSortOrder);
-
     return "/categories/categories";
 
+
   }
+
+  // LIST BY PAGE
+
 
   // CATEGORY STATUS UPDATE
   @GetMapping("/categories/{id}/enabled/{status}")
@@ -89,6 +92,8 @@ public class CategoryController {
       Model model) {
     try {
       service.deleteCategory(id);
+      String categoryDir = "/category-images/"+id;
+      FileUploadUtil.removeDir(categoryDir);
       redirectAttributes.addFlashAttribute("message",
           "The Category with ID :" + id + " has been deleted successfully");
 
@@ -130,10 +135,6 @@ public class CategoryController {
 
   }
 
-  private String getRedirectUrlToAffectedCategory(Category category) {
-    String namePath = category.getName();
-    return "redirect:/categories/page/1?sortField=id&sortOrder=asc&keyword=" + namePath;
-  }
 
   // EDIT CATEGORY
   @GetMapping("/categories/edit/{id}")
@@ -144,7 +145,7 @@ public class CategoryController {
       List<Category> categories = service.listCategoriesUsedInForm();
       model.addAttribute("category", category);
       model.addAttribute("categories", categories);
-      model.addAttribute("pageTitle", "Create new Category");
+      model.addAttribute("pageTitle", "Edit Category with ID: "+ id);
       return "/categories/category_form";
     } catch (CategoryNotFoundException e) {
       redirectAttributes.addFlashAttribute("message", e.getMessage());

@@ -22,20 +22,7 @@
         [[${message}]]
       </div>
 
-      <div>
-        <form th:action="@{/categories}" class="form-inline m-3">
-          <input type="hidden" name="sortField" th:value="${sortField}" />
-          <input type="hidden" name="sortOrder" th:value="${sortOrder}" />
-
-          Filter:&nbsp;
-          <input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
-          &nbsp;&nbsp;
-          <input type="submit" value="Search" class="btn btn-primary" />
-          &nbsp;&nbsp;
-          <input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
-        </form>
-
-      </div>
+      <div th:replace="~{fragments :: search_form('/categories/page/1')}" />
 
 
       <table class="table table-bordered table-striped table-hover table-responsive-xl">
@@ -43,16 +30,19 @@
         <thead class="thead-dark">
 
           <tr>
-            <th th:replace="~{fragments :: categories_column_link('id','Category ID')}" />
+            <th>ID</th>
+            <th>Category Image</th>
 
-            <th>Image</th>
+            <th>
+              <a class="text-white"
+                th:href="@{'/categories/page/'+${pageNum}+'?sortOrder='+${reverseSortOrder}+ ${keyword != null ? '&keyword='+keyword :''}}">Category
+                Name</a>
+              <span th:class="${reverseSortOrder =='desc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
+              </span>
+            </th>
 
-            <th th:replace="~{fragments :: categories_column_link('name','Category Name')}" />
-
-            <th th:replace="~{fragments :: categories_column_link('alias','Category Alias')}" />
-
-            <th th:replace="~{fragments :: categories_column_link('enabled','Enabled')}" />
-
+            <th>Alias</th>
+            <th>Enabled</th>
             <th></th>
           </tr>
 
@@ -70,114 +60,48 @@
 
             <td th:text="${category.name}"></td>
             <td th:text="${category.alias}"></td>
-
             <td>
-              <a th:if="${category.enabled == true}" th:href="@{'/categories/'+${category.id}+'/enabled/false'}"
-                title="Disable Category"><img th:src="@{/images/status/accept.png}" /> </a>
-
-              <a th:if="${category.enabled == false}" th:href="@{'/categories/'+${category.id}+'/enabled/true'}"
-                title="Enable Category"><img th:src="@{/images/status/cross.png}" /> </a>
+              <div th:replace="~{fragments :: category_status}" />
             </td>
-
-
             <td>
-              <a th:href="@{'/categories/edit/'+ ${category.id}}" title="Edit this category"><img
-                  th:src="@{/images/buttons/edit.png}" /> </a>
-              &nbsp;
-
-              <a class="link-delete" th:href="@{'/categories/delete/' + ${category.id}}" th:categoryId="${category.id}"
-                title="Delete this Category"><img th:src="@{/images/buttons/delete.png}" /></a>
+              <div th:replace="~{fragments :: category_actions('/categories',${category.id})}" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- <div class="text-center m-1" th:if="${totalItems > 0}">
-      <span>Users from : [[${startCount}]] to [[${endCount}]] of [[${totalItems}]] </span>
-    </div> -->
-
-    <div class="text-center m-1" th:unless="${totalItems > 0}">
-      <span>No category found</span>
+    <div th:if="${keyword !=null}" class="text-center">
+      <span>Search result does not show categories in hierarchial form </span>
+      <div th:replace="~{fragments :: pagination('/categories','categories')}"></div>
     </div>
 
+    <th:block th:unless="${keyword != null}">
+      <div th:replace="~{fragments :: pagination('/categories','top-level categories')}"></div>
+    </th:block>
 
-    <!-- <div th:if="${totalPages > 1}">
-      <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
 
-          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-            <a th:replace="~{fragments :: categories_page_link(1,'First')}"></a>
-          </li>
 
-          <li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-            <a th:replace="~{fragments :: categories_page_link(${currentPage -1},'Previous')}"></a>
-          </li>
 
-          <li th:class="${currentPage != i ? 'page-item' : 'page-item active'} "
-            th:each="i : ${#numbers.sequence(1,totalPages)}">
-            <a th:replace="~{fragments :: categories_page_link(${i},${i})}"></a>
-          </li>
+    <div th:replace="~{modal_fragment :: confirm_modal}"></div>
 
-          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-            <a th:replace="~{fragments :: categories_page_link(${currentPage+1},'Next')}"></a>
-          </li>
-
-          <li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-            <a th:replace="~{fragments :: categories_page_link(${totalPages},'Last')}"></a>
-          </li>
-
-        </ul>
-      </nav>
-    </div> -->
-
-    <div class="modal fade text-center" id="confirmModal">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="modalTitle">Delete Confirmation</h4>
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-          </div>
-
-          <div class="modal-body">
-            <span id="confirmText"></span>
-          </div>
-
-          <div class="modal-footer">
-            <a class="btn btn-success" href="" id="yesButton">Yes</a>
-            <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
-          </div>
-        </div>
-
-      </div>
-    </div>
+    <div th:replace="~{modal_fragment :: modal_dialog}"></div>
 
     <div th:replace="~{fragments :: footer}"></div>
 
 
-
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $(".link-delete").on("click", function (e) {
-          e.preventDefault();
-          link = $(this);
-          //alert($(this).atrr("href"));
-          categoryId = link.attr("categoryId");
-          $("#yesButton").attr("href", link.attr("href"));
-          $("#confirmText").text("Are you sure to delete this category ID: " + categoryId + " ?");
-          $("#confirmModal").modal();
-        });
-      });
-
-      function clearFilter() {
-        window.location = "[[@{/categories}]]";
-      }
-
-    </script>
-
-
   </div>
+  <script th:src="@{/js/common_list.js}"></script>
+  <script type="text/javascript">
+    moduleURL = "[[@{/categories}]]";
 
+    $(document).ready(function () {
+      $(".link-delete").on("click", function (e) {
+        e.preventDefault();
+        showDeleteConfirmModal($(this), 'category');
+      });
+    });
+
+  </script>
 </body>
-
 </html>

@@ -95,10 +95,12 @@
 
 		</form>
 
+		<div class="text-center" th:replace="~{modal_fragment :: modal_dialog}"></div>
+
 		<div class="text-center" th:replace="~{fragments :: footer}"></div>
 	</div>
 	<script type="text/javascript">
-		
+
 		moduleURL = "[[@{/users}]]";
 
 		function checkForUniqueEmail(form) {
@@ -112,22 +114,16 @@
 				if (response == "OK") {
 					form.submit();
 				} else if (response == "Duplicated Email") {
-					showModalDialog("Warning", "There is another user with this email " + userEmail);
+					showWarningModal("There is another user with this email " + userEmail);
 				} else {
-					showModalDialog("Error", "Unknown response from server");
+					showErrorModal("Unknown response from server");
 				}
 			}).fail(function () {
-				showModalDialog("Error", "Could not connect to the server");
+				showErrorModal("Could not connect to the server");
 			});
 			return false;
 		}
-
-		function showModalDialog(title, message) {
-			$("#modalTitle").text(title);
-			$("#modalBody").text(message);
-			$("#modalDialog").modal();
-
-		}
+	
 
 	</script>
 

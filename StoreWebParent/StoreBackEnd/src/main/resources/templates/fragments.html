@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://org.thymeleaf.org" xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
+<!-- PAGE HEADER  -->
 <head th:fragment="page_head(title)">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
@@ -19,36 +20,118 @@
 
 <body>
 
-	<th th:fragment="users_column_link(fieldName,columnLabel)">
+	<!-- COLUMN FOR ENTITY TABLE -->
+	<th th:fragment="column_link(fieldName,columnLabel)">
 		<a class="text-white"
 			th:href="@{'/users/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword :''}}">
 			[[${columnLabel}]]
 		</a>
 		<span th:if="${sortField == fieldName}" th:class="${sortOrder =='asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
 		</span>
-
-	</th>
-	<th th:fragment="categories_column_link(fieldName,columnLabel)">
-		<a class="text-white"
-			th:href="@{'/categories/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword :''}}">
-			[[${columnLabel}]]
-		</a>
-		<span th:if="${sortField == fieldName}" th:class="${sortOrder =='asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
-		</span>
-
 	</th>
 
 
-	<a th:fragment="users_page_link(pageNum,label)" class="page-link"
-		th:href="@{'/users/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
+	<!-- <a> CUSTOM LINK FOR ENTITY -->
+	<a th:fragment="page_link(moduleURL,pageNum,label)" class="page-link"
+		th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
 
-	<a th:fragment="categories_page_link(pageNum,label)" class="page-link"
-		th:href="@{'/categories/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
+	<!-- PAGE FOOTER -->
+	<div th:fragment="footer" class="text-center m-3">
+		<p style="text-align: center;">Store Control Panel - Copyright &COPY; Store </p>
+	</div>
 
+	<!-- ENTITY PAGINATION (NUMBER OF PAGES) -->
+	<div th:fragment="pagination(moduleURL,entityName)" th:remove="tag">
 
-		<div th:fragment="footer" class="text-center m-3">
-			<p style="text-align: center;">Store Control Panel - Copyright &COPY; Store </p>
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>[[${entityName}]] from : [[${startCount}]] to [[${endCount}]] of [[${totalItems}]] </span>
 		</div>
+
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No [[${entityName}]] found</span>
+		</div>
+
+		<div th:if="${totalPages > 1}">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},1,'First')}"></a>
+					</li>
+
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage -1},'Previous')}"></a>
+					</li>
+
+					<li th:class="${currentPage != i ? 'page-item' : 'page-item active'} "
+						th:each="i : ${#numbers.sequence(1,totalPages)}">
+						<a th:replace="~{fragments :: page_link(${moduleURL} , ${i} , ${i})}"></a>
+					</li>
+
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage+1},'Next')}"></a>
+					</li>
+
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${totalPages},'Last')}"></a>
+					</li>
+
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+	<!-- DELETE FOR CATEGORIES -->
+	<div th:fragment="category_actions" th:remove="tag">
+		<a th:href="@{'/categories/edit/'+ ${category.id}}" title="Edit this category"><img
+				th:src="@{/images/buttons/edit.png}" /> </a>
+		&nbsp;
+		<th:block th:if="${category.hasChildren == false}">
+			<a class="link-delete" th:href="@{'/categories/delete/' + ${category.id}}" 
+			th:entityId="${category.id}"
+			title="Delete this Category">
+				<img th:src="@{/images/buttons/delete.png}" />
+			</a>
+		</th:block>
+	</div>
+
+	<!-- DELETE FOR USERS -->
+	<div th:fragment="user_actions" th:remove="tag">
+		<a th:if="${user.enabled == true}" th:href="@{'/users/'+${user.id}+'/enabled/false'}" title="Disable User"><img
+				th:src="@{/images/status/accept.png}" /> </a>
+
+		<a th:if="${user.enabled == false}" 
+		th:href="@{'/users/'+${user.id}+'/enabled/true'}"
+		 title="Enable User"><img
+				th:src="@{/images/status/cross.png}" /> </a>
+	</div>
+
+
+	<!-- UPDATE ENTITY STATUS -->
+	<div th:fragment="category_status" th:remove="tag">
+		<a th:if="${category.enabled == true}" th:href="@{'/categories/'+${category.id}+'/enabled/false'}"
+			title="Disable Category"><img th:src="@{/images/status/accept.png}" /> </a>
+
+		<a th:if="${category.enabled == false}" th:href="@{'/categories/'+${category.id}+'/enabled/true'}"
+			title="Enable Category"><img th:src="@{/images/status/cross.png}" /> </a>
+
+	</div>
+
+	<!-- SEARCH FRAGMENT -->
+	<div th:fragment="search_form(moduleURL)">
+		<form th:action="@{${moduleURL}}" class="form-inline m-3">
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortOrder" th:value="${sortOrder}" />
+
+			Filter:&nbsp;
+			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
+			&nbsp;&nbsp;
+			<input type="submit" value="Search" class="btn btn-primary" />
+			&nbsp;&nbsp;
+			<input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+		</form>
+
+	</div>
 
 </body>
 

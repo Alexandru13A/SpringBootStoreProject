@@ -2,6 +2,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "StoreFrontEndApplication",
+      "request": "launch",
+      "mainClass": "ro.store.site.StoreFrontEndApplication",
+      "projectName": "StoreFrontEnd"
+    },
+    {
+      "type": "java",
       "name": "Spring Boot-StoreBackEndApplication<StoreBackEnd>",
       "request": "launch",
       "cwd": "${workspaceFolder}",

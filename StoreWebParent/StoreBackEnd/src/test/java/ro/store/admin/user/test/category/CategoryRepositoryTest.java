@@ -1,4 +1,4 @@
-package ro.store.admin.user.test;
+package ro.store.admin.user.test.category;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import ro.store.admin.category.CategoryRepository;
@@ -89,8 +90,26 @@ public class CategoryRepositoryTest {
   @Test
   public void testListRootCategories() {
 
-    List<Category> rootCategories = repo.findRootCategories();
+    List<Category> rootCategories = repo.findRootCategories(Sort.by("name").ascending());
     rootCategories.forEach(cat -> System.out.println(cat.getName()));
+
+  }
+
+  @Test
+  public void testFindByName() {
+    String name = "Computers";
+    Category category = repo.findByName(name);
+    assertThat(category).isNotNull();
+    assertThat(category.getName()).isEqualTo(name);
+  }
+
+  @Test
+  public void testFindByAlias() {
+    String alias = "electronics";
+    Category category = repo.findByAlias(alias);
+
+    assertThat(alias).isNotNull();
+    assertThat(category.getAlias()).isEqualTo(alias);
 
   }
 

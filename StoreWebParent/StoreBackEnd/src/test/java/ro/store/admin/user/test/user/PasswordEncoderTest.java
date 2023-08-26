@@ -1,4 +1,4 @@
-package ro.store.admin.user.test;
+package ro.store.admin.user.test.user;
 
 import static org.assertj.core.api.Assertions.*;
 
