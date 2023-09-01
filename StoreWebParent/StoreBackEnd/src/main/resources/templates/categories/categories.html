@@ -5,6 +5,7 @@
 
 <body>
   <div class="container-fluid">
+    
     <header th:replace="~{navigation :: page_navbar}" />
 
     <div>
@@ -16,15 +17,13 @@
       <a th:href="@{/categories/export/excel}">Export to Excel</a>
     </div>
 
+    <div th:if="${message != null}" class="alert alert-success text-center">
+      [[${message}]]
+    </div>
+
+    <div th:replace="~{fragments :: search_form('/categories/page/1')}" />
+
     <div>
-
-      <div th:if="${message != null}" class="alert alert-success text-center">
-        [[${message}]]
-      </div>
-
-      <div th:replace="~{fragments :: search_form('/categories/page/1')}" />
-
-
       <table class="table table-bordered table-striped table-hover table-responsive-xl">
 
         <thead class="thead-dark">
@@ -32,15 +31,7 @@
           <tr>
             <th>ID</th>
             <th>Category Image</th>
-
-            <th>
-              <a class="text-white"
-                th:href="@{'/categories/page/'+${pageNum}+'?sortOrder='+${reverseSortOrder}+ ${keyword != null ? '&keyword='+keyword :''}}">Category
-                Name</a>
-              <span th:class="${reverseSortOrder =='desc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
-              </span>
-            </th>
-
+            <th th:replace="~{fragments :: column_link('/categories', 'name','Category Name')}" />
             <th>Alias</th>
             <th>Enabled</th>
             <th></th>
@@ -61,15 +52,18 @@
             <td th:text="${category.name}"></td>
             <td th:text="${category.alias}"></td>
             <td>
-              <div th:replace="~{fragments :: category_status}" />
+              <div
+                th:replace="~{fragments :: status(${category.enabled}, 'category', '/categories/'+${category.id})}" />
             </td>
             <td>
-              <div th:replace="~{fragments :: category_actions('/categories',${category.id})}" />
+              <div th:replace="~{fragments :: category_actions}" />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
+
+
 
     <div th:if="${keyword !=null}" class="text-center">
       <span>Search result does not show categories in hierarchial form </span>

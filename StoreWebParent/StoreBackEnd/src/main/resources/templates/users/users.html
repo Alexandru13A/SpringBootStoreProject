@@ -32,19 +32,19 @@
 				<thead class="thead-dark">
 
 					<tr>
-						<th th:replace="~{fragments :: column_link('id','User ID')}" />
+						<th th:replace="~{fragments :: column_link('/users', 'id','User ID')}" />
 
 						<th>Photo</th>
 
-						<th th:replace="~{fragments :: column_link('email','Email')}" />
+						<th th:replace="~{fragments :: column_link('/users','email','Email')}" />
 
-						<th th:replace="~{fragments :: column_link('firstName','First Name')}" />
+						<th th:replace="~{fragments :: column_link('/users','firstName','First Name')}" />
 
-						<th th:replace="~{fragments :: column_link('lastName','Last Name')}" />
+						<th th:replace="~{fragments :: column_link('/users','lastName','Last Name')}" />
 
 						<th>Roles</th>
 
-						<th th:replace="~{fragments :: column_link('enabled','Enabled')}" />
+						<th th:replace="~{fragments :: column_link('/users','enabled','Enabled')}" />
 
 						<th></th>
 					</tr>
@@ -66,16 +66,11 @@
 						<td th:text="${user.lastName}"></td>
 						<td th:text="${user.roles}"></td>
 						<td>
-							<div th:replace="~{fragments :: user_actions}" />
+							<div th:replace="~{fragments :: status(${user.enabled}, 'user', '/users/'+${user.id})}" />
 						</td>
 
 						<td>
-							<a th:href="@{'/users/edit/'+ ${user.id}}" title="Edit this user"><img
-									th:src="@{/images/buttons/edit.png}" /> </a>
-							&nbsp;
-
-							<a class="link-delete" th:href="@{'/users/delete/' + ${user.id}}" th:userId="${user.id}"
-								title="Delete this User"><img th:src="@{/images/buttons/delete.png}" /></a>
+							<di th:replace="~{fragments :: users_actions}" />
 						</td>
 					</tr>
 				</tbody>

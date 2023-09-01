@@ -41,7 +41,7 @@ public class WebSecurityConfig {
 			http.csrf(csrf -> csrf.disable())
 					.authorizeHttpRequests((requests) -> requests 
 							.requestMatchers("/users/**").hasAuthority("Admin")
-							.requestMatchers("/categories/**").hasAnyAuthority("Admin" ,"Editor")
+							.requestMatchers("/categories/**","/brands/**").hasAnyAuthority("Admin" ,"Editor")
 							.requestMatchers("/images/**", "/js/**", "/webjars/**")
 							.permitAll()
 							.anyRequest()

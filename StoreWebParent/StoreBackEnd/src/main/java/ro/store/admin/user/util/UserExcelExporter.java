@@ -13,6 +13,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
+import ro.store.admin.common.util.CommonExportFunction;
 import ro.store.common.entity.User;
 
 public class UserExcelExporter extends CommonExportFunction {
@@ -58,7 +59,7 @@ public class UserExcelExporter extends CommonExportFunction {
 	}
 
 	public void export(List<User> listUsers, HttpServletResponse response) throws IOException {
-		super.setResponseHeader(response, "application/octet-stream", ".xlsx");
+		super.setResponseHeader(response, "application/octet-stream", ".xlsx","users_");
 		writeHeaderLine();
 		writeDataLines(listUsers);
 
