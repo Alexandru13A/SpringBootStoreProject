@@ -1,5 +1,6 @@
 package ro.store.admin.user.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +14,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Bean
 	public UserDetailsService userDetailsService() {
@@ -42,6 +46,7 @@ public class WebSecurityConfig {
 					.authorizeHttpRequests((requests) -> requests 
 							.requestMatchers("/users/**").hasAuthority("Admin")
 							.requestMatchers("/categories/**","/brands/**").hasAnyAuthority("Admin" ,"Editor")
+							.requestMatchers("/products/**").hasAnyAuthority("Admin","Editor","Salesperson","Shipper")
 							.requestMatchers("/images/**", "/js/**", "/webjars/**")
 							.permitAll()
 							.anyRequest()
@@ -50,9 +55,10 @@ public class WebSecurityConfig {
 							.loginPage("/login")
 							.usernameParameter("email")
 							.permitAll())
-					.logout(logout -> logout.permitAll());
+					.logout(logout -> logout.permitAll()).rememberMe((remember)-> remember.userDetailsService(userDetailsService));
 	
 			return http.build();
 	}
+	
 
 }

@@ -13,10 +13,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "categories")
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class Category {
 
   @Id
@@ -41,8 +46,7 @@ public class Category {
   @OneToMany(mappedBy = "parent")
   private Set<Category> children = new HashSet<>();
 
-  public Category() {
-  }
+
 
   public Category(Integer id) {
     this.id = id;
@@ -69,7 +73,7 @@ public class Category {
     copyCategory.setName(category.getName());
     copyCategory.setImage(category.getImage());
     copyCategory.setAlias(category.getAlias());
-    copyCategory.setEnabled(category.getEnabled());
+    copyCategory.setEnabled(category.isEnabled());
     copyCategory.setHasChildren(category.getChildren().size() > 0);
     return copyCategory;
   }
@@ -99,73 +103,7 @@ public class Category {
     this.alias = alias;
   }
 
-  public Integer getId() {
-    return this.id;
-  }
-
-  public void setId(Integer id) {
-    this.id = id;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public String getAlias() {
-    return this.alias;
-  }
-
-  public void setAlias(String alias) {
-    this.alias = alias;
-  }
-
-  public String getImage() {
-    return this.image;
-  }
-
-  public void setImage(String image) {
-    this.image = image;
-  }
-
-  public boolean isEnabled() {
-    return this.enabled;
-  }
-
-  public boolean getEnabled() {
-    return this.enabled;
-  }
-
-  public void setEnabled(boolean enabled) {
-    this.enabled = enabled;
-  }
-
-  public Category getParent() {
-    return this.parent;
-  }
-
-  public void setParent(Category parent) {
-    this.parent = parent;
-  }
-
-  public Set<Category> getChildren() {
-    return this.children;
-  }
-
-  public void setChildren(Set<Category> children) {
-    this.children = children;
-  }
-
-  public boolean isHasChildren() {
-    return hasChildren;
-  }
-
-  public void setHasChildren(boolean hasChildren) {
-    this.hasChildren = hasChildren;
-  }
+ 
 
   @Transient
   private boolean hasChildren;

@@ -2,8 +2,8 @@
 <html xmlns:th="http://org.thymeleaf.org" xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <!-- PAGE HEADER  -->
-
-<head th:fragment="page_head(title)">
+<!-- CONTAINS ALL THE SOURCES LIKE BOOTSTRAP , NAVIGATION BAR STYLE ... -->
+<head th:fragment="page_head(title,remove)" th:remove="${remove}">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
@@ -111,6 +111,17 @@
 		&nbsp;
 		<a class="link-delete" th:href="@{'/brands/delete/' + ${brand.id}}" th:entityId="${brand.id}"
 			title="Delete this Brand"><img th:src="@{/images/buttons/delete.png}" /></a>
+	</div>
+	<!--EDIT AND DELETE FOR Products -->
+	<div th:fragment="products_actions" th:remove="tag">
+		<a class="link-detail" th:href="@{'/products/detail/'+${product.id}}" 
+		title="View details of this product"><img style="width: 35px;height: 35px; margin-right: 5px;" th:src="@{/images/status/details.png}" /></a>
+
+		<a th:href="@{'/products/edit/'+ ${product.id}}" title="Edit this Product"><img th:src="@{/images/buttons/edit.png}" />
+		</a>
+		&nbsp;
+		<a class="link-delete" th:href="@{'/products/delete/' + ${product.id}}" th:entityId="${product.id}"
+			title="Delete this Product"><img th:src="@{/images/buttons/delete.png}" /></a>
 	</div>
 
 

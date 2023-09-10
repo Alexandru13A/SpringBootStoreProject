@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<head th:replace="~{fragments :: page_head('Store - Categories')}" />
+<head th:replace="~{fragments :: page_head('Store - Categories','none')}" />
 
 <body>
   <div class="container-fluid">
@@ -52,8 +52,7 @@
             <td th:text="${category.name}"></td>
             <td th:text="${category.alias}"></td>
             <td>
-              <div
-                th:replace="~{fragments :: status(${category.enabled}, 'category', '/categories/'+${category.id})}" />
+              <div th:replace="~{fragments :: status(${category.enabled}, 'category', '/categories/'+${category.id})}" />
             </td>
             <td>
               <div th:replace="~{fragments :: category_actions}" />

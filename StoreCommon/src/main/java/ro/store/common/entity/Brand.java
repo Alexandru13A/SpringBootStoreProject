@@ -13,9 +13,15 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "brands")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Brand {
 
   @Id
@@ -32,12 +38,6 @@ public class Brand {
   @JoinTable(name = "brands_categories", joinColumns = @JoinColumn(name = "brand_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
   private Set<Category> categories = new HashSet<>();
 
-
-
-  public Brand() {
-  }
-
-
   public Brand(Integer id, String name, String logo, Set<Category> categories) {
     this.id = id;
     this.name = name;
@@ -45,31 +45,11 @@ public class Brand {
     this.categories = categories;
   }
 
-
-
-  public Integer getId() {
-    return this.id;
-  }
-
-  public void setId(Integer id) {
+  public Brand(Integer id, String name) {
     this.id = id;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
     this.name = name;
   }
-
-  public String getLogo() {
-    return this.logo;
-  }
-
-  public void setLogo(String logo) {
-    this.logo = logo;
-  }
+ 
 
   public Set<Category> getCategories() {
     return this.categories;
@@ -79,8 +59,7 @@ public class Brand {
     this.categories = categories;
   }
 
-
-    @Transient
+  @Transient
   public String getImagePath() {
     if (logo == null)
       return "/images/status/photo.png";
@@ -88,16 +67,14 @@ public class Brand {
     return "/brand-logos/" + this.id + "/" + this.logo;
   }
 
-
   @Override
   public String toString() {
     return "{" +
-      " id='" + getId() + "'" +
-      ", name='" + getName() + "'" +
-      ", logo='" + getLogo() + "'" +
-      ", categories='" + getCategories() + "'" +
-      "}";
+        " id='" + getId() + "'" +
+        ", name='" + getName() + "'" +
+        ", logo='" + getLogo() + "'" +
+        ", categories='" + getCategories() + "'" +
+        "}";
   }
-
 
 }

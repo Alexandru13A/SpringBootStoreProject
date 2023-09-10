@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymelaf.org">
+
+<head th:replace="~{fragments :: page_head('Store - Brands','none')}" />
+
+<body>
+  <div class="container-fluid">
+
+    <header th:replace="~{navigation :: page_navbar}" />
+
+    <div>
+      <h2>Manage Products</h2>
+      <a th:href="@{/products/new}">Create new Product</a>
+      &nbsp;|&nbsp;
+      <a th:href="@{/products/export/csv}">Export to CSV</a>
+      &nbsp;|&nbsp;
+      <a th:href="@{/products/export/excel}">Export to Excel</a>
+    </div>
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+      [[${message}]]
+    </div>
+
+    <div th:replace="~{fragments :: search_form('/products/page/1')}" />
+
+
+
+    <table class="table table-bordered table-hover table-responsive-xl">
+      <thead class="thead-dark">
+        <tr>
+          <th>ID</th>
+          <th>Principal Image</th>
+          <th>Products Name</th>
+          <th>Brand</th>
+          <th>Category</th>
+          <th>Enabled</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody th:each="product : ${products}">
+
+        <td th:text="${product.id}"></td>
+        <td>
+          <img th:src="@{${product.getMainImagePath}}" style="width: 80px; height: 80px;" />
+        </td>
+        <td>
+          <a class="link-detail" th:text="${product.name}" th:href="@{'/products/detail/'+${product.id}}"
+            title="View details of this product" style="color:black">
+          </a>
+        </td>
+        <td th:text="${product.brand.name}"></td>
+        <td th:text="${product.category.name}"></td>
+        <td>
+          <div th:replace="~{fragments :: status(${product.enabled}, 'product', '/products/'+${product.id})}" />
+        </td>
+        <td>
+          <th th:replace="~{fragments :: products_actions}" />
+        </td>
+      </tbody>
+    </table>
+  </div>
+
+
+  <div th:replace="~{modal_fragment :: confirm_modal}"></div>
+
+  <div th:replace="~{modal_fragment :: modal_dialog}"></div>
+
+  <div class="modal fade" id="detailModal">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+
+      </div>
+    </div>
+  </div>
+
+  <div th:replace="~{fragments :: footer}"></div>
+
+  </div>
+  <script th:src="@{/js/common_list.js}"></script>
+  <script type="text/javascript">
+    moduleURL = "[[@{/products}]]";
+
+    $(document).ready(function () {
+      $(".link-delete").on("click", function (e) {
+        e.preventDefault();
+        showDeleteConfirmModal($(this), 'product');
+      });
+
+      $(".link-detail").on("click",function(e){
+        e.preventDefault();
+        linkDetailURL = $(this).attr("href");
+        $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
+
+      });
+    });
+
+  </script>
+</body>
+
+</html>

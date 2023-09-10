@@ -1,4 +1,4 @@
-package ro.store.admin;
+package ro.store.admin.common.util;
 
 public class EntityPageInfo {
 

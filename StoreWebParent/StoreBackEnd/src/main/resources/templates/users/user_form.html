@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://org.thymeleaf.org">
 
-<head th:replace="~{fragments :: page_head(${pageTitle})}"></head>
+<head th:replace="~{fragments :: page_head(${pageTitle},'none')}"></head>
 
 
 <body>
@@ -101,6 +101,7 @@
 	</div>
 	<script type="text/javascript">
 
+		MAX_FILE_SIZE = 502400;
 		moduleURL = "[[@{/users}]]";
 
 		function checkForUniqueEmail(form) {
@@ -123,7 +124,7 @@
 			});
 			return false;
 		}
-	
+
 
 	</script>
 
