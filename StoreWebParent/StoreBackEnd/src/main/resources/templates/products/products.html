@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymelaf.org">
+<html xmlns:th="http://www.thymelaf.org" xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head th:replace="~{fragments :: page_head('Store - Brands','none')}" />
 
@@ -10,30 +10,34 @@
 
     <div>
       <h2>Manage Products</h2>
-      <a th:href="@{/products/new}">Create new Product</a>
-      &nbsp;|&nbsp;
-      <a th:href="@{/products/export/csv}">Export to CSV</a>
-      &nbsp;|&nbsp;
-      <a th:href="@{/products/export/excel}">Export to Excel</a>
+      <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+        <a th:href="@{/products/new}">Create new Product</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/products/export/csv}">Export to CSV</a>
+        &nbsp;|&nbsp;
+        <a th:href="@{/products/export/excel}">Export to Excel</a>
+      </th:block>
     </div>
 
     <div th:if="${message != null}" class="alert alert-success text-center">
       [[${message}]]
     </div>
 
-    <div th:replace="~{fragments :: search_form('/products/page/1')}" />
-
-
+    <div th:replace="~{fragments :: search_form_categories('/products/page/1')}" />
 
     <table class="table table-bordered table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
-          <th>ID</th>
+          <th th:replace="~{fragments :: column_link('/products','id','ID')}" />
           <th>Principal Image</th>
-          <th>Products Name</th>
-          <th>Brand</th>
-          <th>Category</th>
-          <th>Enabled</th>
+          <th th:replace="~{fragments :: column_link('/products','name','Product Name')}" />
+          <th th:replace="~{fragments :: column_link('/products','brand','Brand')}" />
+          <th th:replace="~{fragments :: column_link('/products','category','Category')}" />
+
+          <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+            <th>Enabled</th>
+          </th:block>
+
           <th></th>
         </tr>
       </thead>
@@ -45,18 +49,25 @@
           <img th:src="@{${product.getMainImagePath}}" style="width: 80px; height: 80px;" />
         </td>
         <td>
-          <a class="link-detail" th:text="${product.name}" th:href="@{'/products/detail/'+${product.id}}"
-            title="View details of this product" style="color:black">
+          <a class="link-detail" th:text="${product.shortName}" th:href="@{'/products/detail/'+${product.id}}"
+            th:title="${product.name}" style="color:black">
           </a>
         </td>
         <td th:text="${product.brand.name}"></td>
         <td th:text="${product.category.name}"></td>
-        <td>
-          <div th:replace="~{fragments :: status(${product.enabled}, 'product', '/products/'+${product.id})}" />
-        </td>
-        <td>
-          <th th:replace="~{fragments :: products_actions}" />
-        </td>
+
+        <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+          <td>
+            <div th:replace="~{fragments :: status(${product.enabled}, 'product', '/products/'+${product.id})}" />
+          </td>
+        </th:block>
+
+     
+          <td>
+            <th th:replace="~{fragments :: products_actions}" />
+          </td>
+     
+
       </tbody>
     </table>
   </div>
@@ -74,6 +85,7 @@
     </div>
   </div>
 
+  <div th:replace="~{fragments :: pagination('/products','products')}" />
   <div th:replace="~{fragments :: footer}"></div>
 
   </div>
@@ -87,12 +99,17 @@
         showDeleteConfirmModal($(this), 'product');
       });
 
-      $(".link-detail").on("click",function(e){
+      $(".link-detail").on("click", function (e) {
         e.preventDefault();
         linkDetailURL = $(this).attr("href");
         $("#detailModal").modal("show").find(".modal-content").load(linkDetailURL);
 
       });
+
+      $("#dropdownCategory").on("change", function () {
+        $("#searchProductsByCategory").submit();
+      });
+
     });
 
   </script>

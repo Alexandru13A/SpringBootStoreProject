@@ -1,4 +1,4 @@
-package ro.store.admin;
+package ro.store.admin.MainController;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

@@ -38,10 +38,13 @@ public class UserController {
 		return listByPage(1, model, "id", "asc", null);
 	}
 
-	//LIST USERS BY PAGE
+	// LIST USERS BY PAGE
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PathVariable("pageNum") int pageNum, Model model, @Param("sortField") String sortField,
-			@Param("sortOrder") String sortOrder, @Param("keyword") String keyword) {
+	public String listByPage(@PathVariable("pageNum") int pageNum,
+			Model model,
+			@Param("sortField") String sortField,
+			@Param("sortOrder") String sortOrder,
+			@Param("keyword") String keyword) {
 		Page<User> page = service.listByPage(pageNum, sortField, sortOrder, keyword);
 
 		List<User> users = page.getContent();

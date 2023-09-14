@@ -4,32 +4,58 @@
 
 
 <body>
-
   <header class="container-fluid" th:fragment="page_navbar">
     <div class="navbar">
       <div class="logo">
         <a th:href="@{/}">
-          <img th:src="@{/images/site/LOGOSTORE.png}" style="max-height: 80px; max-width: 80px; border-radius: 50px;" />
+          <img th:src="@{/images/site/LOGOSTORE.png}" style="max-height: 60px; max-width: 60px; border-radius: 50px;" />
         </a>
       </div>
 
+
       <ul class="links">
+        <th:block sec:authorize="hasAnyAuthority('Admin')">
+          <li class="li nav-item dropdown">
+            <a class="a dropdown-toggle" data-toggle="dropdown" th:href="@{/users}">Users</a>
 
-        <li class="li" sec:authorize="hasAuthority('Admin')">
-          <a class="a" th:href="@{/users}">Users</a>
-        </li>
-
-        <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
-          <li class="li" sec:authority="hasAnyAuthority('Admin' ,'Editor')">
-            <a class="a" th:href="@{/categories}">Categories</a></li>
+            <div class="dropdown-menu">
+              <a class="a dropdown-item" th:href="@{/users/new}">Create new</a>
+              <a class="a dropdown-item" th:href="@{/users}">View all</a>
+            </div>
+          </li>
         </th:block>
 
         <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
-          <li class="li"><a class="a" th:href="@{/brands}">Brands</a></li>
+          <li class="li nav-item dropdown">
+            <a class="a dropdown-toggle" data-toggle="dropdown" th:href="@{/categories}">Categories</a>
+            <div class="dropdown-menu">
+              <a class="a dropdown-item" th:href="@{/categories/new}">Create new</a>
+              <a class="a dropdown-item" th:href="@{/categories}">View all</a>
+            </div>
+          </li>
         </th:block>
+
+        <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
+          <li class="li nav-item dropdown">
+            <a class="a dropdown-toggle" data-toggle="dropdown" th:href="@{/brands}">Brands</a>
+
+            <div class="dropdown-menu">
+              <a class="a dropdown-item" th:href="@{/brands/new}">Create new</a>
+              <a class="a dropdown-item" th:href="@{/brands}">View all</a>
+            </div>
+          </li>
+        </th:block>
+
 
         <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor','Shipper','Salesperson')">
-          <li class="li"><a class="a" th:href="@{/products}">Products</a></li>
+          <li class="li nav-item dropdown">
+            <a class="a dropdown-toggle" data-toggle="dropdown" th:href="@{/products}">Products</a>
+            <div class="dropdown-menu">
+              <a class="a dropdown-item" th:href="@{/products/new}"
+                sec:authorize="hasAnyAuthority('Admin' ,'Editor')">Create new</a>
+              <a class="a dropdown-item" th:href="@{/products}">View all</a>
+            </div>
+          </li>
         </th:block>
 
         <th:block sec:authorize="hasAnyAuthority('Admin' ,'Salesperson')">
@@ -59,19 +85,19 @@
         <th:block sec:authorize="hasAuthority('Admin')">
           <li class="li"><a class="a" th:href="@{/settings}">Settings</a> </li>
         </th:block>
-        
-        <li class="li dropdown">
-          <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
-
-          <a style="color: black;cursor: pointer;" class="dropdown-toggle" data-toggle="dropdown" th:href="@{/account}"
-            sec:authentication="principal.fullName"></a>
-
-          <div class="dropdown-menu">
-            <a th:href="@{/logout}" style="margin-left: 43px;" class="action-btn">Logout</a>
-          </div>
-        </li>
-
       </ul>
+
+      <li class="li dropdown" style="margin-left: 40px;">
+        <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
+
+        <a style=" text-decoration: none; color: black;cursor: pointer;" class="a dropdown-toggle"
+          data-toggle="dropdown" th:href="@{/account}" sec:authentication="principal.fullName"></a>
+
+        <div class="dropdown-menu" style="margin-left: 50px;">
+          <a th:href="@{/logout}" class="action-btn">Logout</a>
+        </div>
+      </li>
+      
       <div class="toggle_btn">
         <i class="fa-solid fa-bars"></i>
       </div>

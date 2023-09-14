@@ -1,0 +1,18 @@
+.navbar ul li:hover button_dropdown{
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background: rgba(75, 34, 34, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+}
+
+button_dropdown ul{
+  display: block;
+  margin: 10px;
+}
+button_dropdown ul li{
+ width: 150px;
+
+}

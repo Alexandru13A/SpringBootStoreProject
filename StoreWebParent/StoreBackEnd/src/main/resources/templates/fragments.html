@@ -3,6 +3,7 @@
 
 <!-- PAGE HEADER  -->
 <!-- CONTAINS ALL THE SOURCES LIKE BOOTSTRAP , NAVIGATION BAR STYLE ... -->
+
 <head th:fragment="page_head(title,remove)" th:remove="${remove}">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
@@ -14,6 +15,8 @@
 	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
 	<script type="text/javascript" th:src="@{/js/common.js}"></script>
 	<link rel="stylesheet" th:href="@{/css/navbar.css}" />
+	<link rel="stylesheet" th:href="@{/css/navbar_buttons.css}" />
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
 		integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
 		crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -23,8 +26,8 @@
 
 	<!-- COLUMN FOR ENTITY TABLE -->
 	<th th:fragment="column_link(moduleURL,fieldName,columnLabel)">
-		<a class="text-white"
-			th:href="@{${moduleURL}+'/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} + ${keyword != null ? '&keyword='+keyword :''}}">
+		<a class="text-white" th:href="@{${moduleURL}+'/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} 
+			+ ${keyword != null ? '&keyword='+keyword :''}}">
 			[[${columnLabel}]]
 		</a>
 		<span th:if="${sortField == fieldName}" th:class="${sortOrder =='asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
@@ -34,7 +37,7 @@
 
 	<!-- <a> CUSTOM LINK FOR ENTITY -->
 	<a th:fragment="page_link(moduleURL,pageNum,label)" class="page-link"
-		th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword : ''}}">[[${label}]]</a>
+		th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword :''}}">[[${label}]]</a>
 
 	<!-- PAGE FOOTER -->
 	<div th:fragment="footer" class="text-center m-3">
@@ -114,14 +117,19 @@
 	</div>
 	<!--EDIT AND DELETE FOR Products -->
 	<div th:fragment="products_actions" th:remove="tag">
-		<a class="link-detail" th:href="@{'/products/detail/'+${product.id}}" 
-		title="View details of this product"><img style="width: 35px;height: 35px; margin-right: 5px;" th:src="@{/images/status/details.png}" /></a>
+		<a class="link-detail" th:href="@{'/products/detail/'+${product.id}}" title="View details of this product"><img
+				style="width: 35px;height: 35px; margin-right: 5px;" th:src="@{/images/status/details.png}" /></a>
 
-		<a th:href="@{'/products/edit/'+ ${product.id}}" title="Edit this Product"><img th:src="@{/images/buttons/edit.png}" />
-		</a>
+		<th:block sec:authorize="hasAnyAuthority('Admin','Editor','Salesperson')">
+			<a th:href="@{'/products/edit/'+ ${product.id}}" title="Edit this Product"><img
+					th:src="@{/images/buttons/edit.png}" />
+			</a>
+		</th:block>
 		&nbsp;
-		<a class="link-delete" th:href="@{'/products/delete/' + ${product.id}}" th:entityId="${product.id}"
-			title="Delete this Product"><img th:src="@{/images/buttons/delete.png}" /></a>
+		<th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+			<a class="link-delete" th:href="@{'/products/delete/' + ${product.id}}" th:entityId="${product.id}"
+				title="Delete this Product"><img th:src="@{/images/buttons/delete.png}" /></a>
+		</th:block>
 	</div>
 
 
@@ -143,6 +151,30 @@
 			<input type="hidden" name="sortField" th:value="${sortField}" />
 			<input type="hidden" name="sortOrder" th:value="${sortOrder}" />
 
+			Filter:&nbsp;
+			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
+			&nbsp;&nbsp;
+			<input type="submit" value="Search" class="btn btn-primary" />
+			&nbsp;&nbsp;
+			<input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
+		</form>
+
+	</div>
+
+	<!-- Search For Products -->
+	<div th:fragment="search_form_categories(moduleURL)">
+		<form th:action="@{${moduleURL}}" class="form-inline m-3" id="searchProductsByCategory">
+			<input type="hidden" name="sortField" th:value="${sortField}" />
+			<input type="hidden" name="sortOrder" th:value="${sortOrder}" />
+
+			Category:&nbsp;
+			<select class="form-control" name="categoryId" id="dropdownCategory">
+				<option value="0">All Categories</option>
+				<th:block th:each="category :${categories}">
+					<option th:value="${category.id}" th:selected="(${categoryId}== ${category.id})">[[${category.name}]]</option>
+				</th:block>
+			</select>
+			&nbsp;&nbsp;
 			Filter:&nbsp;
 			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
 			&nbsp;&nbsp;

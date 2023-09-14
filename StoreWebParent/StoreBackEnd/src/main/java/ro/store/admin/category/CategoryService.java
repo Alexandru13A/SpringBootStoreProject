@@ -30,7 +30,6 @@ public class CategoryService {
     this.repository = repository;
   }
 
-
   // GET ALL CATEGORIES HIERARCHIAL
   public List<Category> listByPage(CategoryPageInfo pageInfo, int pageNum, String sortOrder, String keyword) {
     Sort sort = Sort.by("name");
@@ -62,7 +61,7 @@ public class CategoryService {
         category.setHasChildren(category.getChildren().size() > 0);
       }
       return searchResult;
-    
+
     } else {
       return listHierarchialCategories(rootCategories, sortOrder);
     }
@@ -105,6 +104,12 @@ public class CategoryService {
 
   // SAVE CATEGORY
   public Category saveCategory(Category category) {
+    Category parent = category.getParent();
+    if(parent != null){
+      String allParentsIds = parent.getAllParentsIds() == null ? "-" :parent.getAllParentsIds();
+      allParentsIds += String.valueOf(parent.getId()+"-");
+      category.setAllParentsIds(allParentsIds);
+    }
     return repository.save(category);
   }
 

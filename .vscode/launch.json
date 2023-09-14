@@ -4,6 +4,13 @@
       "type": "java",
       "name": "StoreFrontEndApplication",
       "request": "launch",
+      "mainClass": "ro.store.StoreFrontEndApplication",
+      "projectName": "StoreFrontEnd"
+    },
+    {
+      "type": "java",
+      "name": "StoreFrontEndApplication",
+      "request": "launch",
       "mainClass": "ro.store.site.StoreFrontEndApplication",
       "projectName": "StoreFrontEnd"
     },

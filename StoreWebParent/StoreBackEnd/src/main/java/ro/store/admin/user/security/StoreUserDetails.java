@@ -13,7 +13,7 @@ import ro.store.common.entity.Role;
 import ro.store.common.entity.User;
 
 public class StoreUserDetails implements UserDetails {
-
+  private static final long serialVersionUID = 1L;
   private User user;
 
   public StoreUserDetails(User user) {
@@ -72,6 +72,10 @@ public class StoreUserDetails implements UserDetails {
 
   public void setLastName(String lastName) {
     this.user.setLastName(lastName);
+  }
+
+  public boolean hasRole(String roleName) {
+    return user.hasRole(roleName);
   }
 
 }

@@ -83,12 +83,11 @@ public class Product {
   @JoinColumn(name = "brand_id")
   private Brand brand;
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,orphanRemoval = true)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<ProductImage> images = new HashSet<>();
 
-  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,orphanRemoval = true)
+  @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ProductDetail> details = new ArrayList<>();
-
 
   public Category getCategory() {
     return this.category;
@@ -114,11 +113,10 @@ public class Product {
   public void addDetails(String name, String value) {
     this.details.add(new ProductDetail(name, value, this));
   }
-  
-  public void addDetails(Integer id,String name, String value) {
-    this.details.add(new ProductDetail(id,name, value, this));
-  }
 
+  public void addDetails(Integer id, String name, String value) {
+    this.details.add(new ProductDetail(id, name, value, this));
+  }
 
   public boolean containsImageName(String imageName) {
     Iterator<ProductImage> iterator = images.iterator();
@@ -129,6 +127,14 @@ public class Product {
       }
     }
     return false;
+  }
+
+  @Transient
+  public String getShortName() {
+    if (name.length() > 70) {
+      return name.substring(0, 70).concat("...");
+    }
+    return name;
   }
 
 }

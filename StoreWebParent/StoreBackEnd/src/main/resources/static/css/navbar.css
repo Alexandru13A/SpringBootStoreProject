@@ -1,98 +1,117 @@
-*{
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap');
+
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Open Sans',sans-serif;
+  font-family: 'Open Sans', sans-serif;
 }
 
-body{
-
-  height: 100vh;
-  background-color: white;
-  background-size: cover;
-  background-position: center;
+.li .a .action-btn {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
 }
-.li{
+
+.li {
   list-style: none;
   text-decoration: none;
+  transition: 0.1s;
 }
 
-.a{
+
+.a {
   text-decoration: none;
   color: rgb(0, 0, 0);
-  font-size: 17px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.a:hover {
+  color: orange;
+  background-color: orange;
+  color: white;
+  padding: 4px;
+  border-radius: 10px;
   text-decoration: none;
 }
 
-.a:hover{
-  color:orange;
-  font-size: 17px;
-  background-color: orange;
-  color: white;
-  padding: 3px;
-  border-radius: 10px;
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 10%;
 }
 
-
-header{
-  position: relative;
-  padding: 10px;
-  margin-bottom: 50px;
-}
-
-.navbar{
+.navbar {
   width: 90%;
   height: 60px;
   max-width: auto;
-  margin:  auto;
+  margin: auto;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.navbar .logo{
-  font-size: 1.5rem;
+.navbar .logo {
   font-weight: bold;
 }
 
-.navbar .links{
-  display: flex;
-  gap: 25px;
-
+.links {
+  list-style: none;
 }
 
-.navbar .toggle_btn{
+.links .li {
+  margin-left: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  pad: 0px 20px;
+}
+
+.links .li .a {
+  transition: all 0.3s ease 0s;
+}
+
+.navbar .toggle_btn {
   color: black;
-  font-size: 1.5rem;
   cursor: pointer;
   display: none;
 }
 
-.action-btn{
+.action-btn {
   background-color: orange;
   color: rgb(238, 238, 238);
   padding: 0.5rem 1rem;
   border: none;
   outline: none;
   border-radius: 20px;
-  font-size: 0.8rem;
   font-weight: bold;
   cursor: pointer;
-  transition: scale 0.3 ease;
+  transition: scale 0.3s ease;
 }
 
-.action-btn:hover{
+.action-btn:hover {
   scale: 1.05;
   color: black;
+  transition: 0.1;
+  text-decoration: none;
 }
 
-.action-btn:active{
+.action-btn:active {
   scale: 0.95;
 
 }
 
+.dropdown-menu {
+  background: rgba(75, 34, 34, 0.1);
+  backdrop-filter: blur(15px);
+  border-radius: 10px;
+  transition: none;
+  text-align: center;
+  position: absolute;
+}
 
-.dropdown_menu{
+.dropdown_menu {
+  margin-top: 10px;
   display: none;
   position: absolute;
   right: 2rem;
@@ -104,42 +123,48 @@ header{
   border-radius: 10px;
   overflow: hidden;
   z-index: 1000;
-  transition: height .2s cubic-bezier(0.175 ,0.885, 0.32,1.275);
+  transition: height .3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
-.dropdown_menu.open{
+.dropdown_menu.open {
   height: 635px;
 }
 
-.dropdown_menu .li{
+.dropdown_menu .li {
   padding: 0.7rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.dropdown_menu .action-btn{
+
+.dropdown_menu .action-btn {
   width: 100%;
   display: flex;
   justify-content: center;
 }
 
-@media (max-width: 1530px){
+@media (max-width: 1530px) {
+
   .navbar .links,
-  .navbar .action-btn{
+  .navbar .action-btn {
     display: none;
   }
 
-  .navbar .toggle_btn{
+  .dropdown {
+    display: none;
+  }
+
+  .navbar .toggle_btn {
     display: block;
   }
 
-  .dropdown_menu{
+  .dropdown_menu {
     display: block;
   }
 }
 
-@media(max-width: 576px){
-  .dropdown_menu{
+@media(max-width: 576px) {
+  .dropdown_menu {
     left: 2rem;
     width: unset;
   }
