@@ -1,4 +1,4 @@
-package ro.store.admin.product;
+package ro.store.common.exception.product;
 
 public class ProductNotFoundException extends Exception {
 

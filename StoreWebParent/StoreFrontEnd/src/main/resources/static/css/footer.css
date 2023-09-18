@@ -1,0 +1,35 @@
+.footer {
+  color: #000000; /* Culoarea textului */
+  padding: 20px; /* Spațiul interior al footer-ului */
+  width: 100%;
+  text-align: center; /* Alineat la centru */
+  position: absolute;
+  bottom: 0;
+}
+
+.navbar_footer {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.links_footer {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.li_footer {
+  margin-right: 20px; /* Spațiul dintre legături */
+}
+
+.a_footer {
+  text-decoration: none;
+  color: #000000; /* Culoarea legăturilor */
+}
+
+.a_footer:hover{
+  color: orange;
+  text-decoration: none;
+}

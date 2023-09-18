@@ -4,22 +4,76 @@
 <!-- PAGE HEADER  -->
 <!-- CONTAINS ALL THE SOURCES LIKE BOOTSTRAP , NAVIGATION BAR STYLE ... -->
 
-<head th:fragment="page_head(title,remove)" th:remove="${remove}" />
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
+<head th:fragment="page_head(title,remove)" th:remove="${remove}">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0">
 
-<title>[[${title}]]</title>
+	<title>[[${title}]]</title>
 
-<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
-<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
-<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+	<script type="text/javascript" th:src="@{/js/common.js}"></script>
+	<link rel="stylesheet" th:href="@{/css/navbar.css}" />
+	<link rel="stylesheet" th:href="@{/css/footer.css}" />
+
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+		integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+		crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-	<!-- PAGE FOOTER -->
+	<!-- Footer Copyright -->
 	<div th:fragment="footer" class="text-center m-3">
 		<p style="text-align: center;">Store Control Panel - Copyright &COPY; Store </p>
 	</div>
+
+	<!-- Pagination front end -->
+	<div th:fragment="pagination(moduleURL,entityName)" th:remove="tag">
+
+		<div class="text-center m-1" th:if="${totalItems > 0}">
+			<span>[[${entityName}]] from : [[${startCount}]] to [[${endCount}]] of [[${totalItems}]] </span>
+		</div>
+
+		<div class="text-center m-1" th:unless="${totalItems > 0}">
+			<span>No [[${entityName}]] found</span>
+		</div>
+
+		<div th:if="${totalPages > 1}">
+			<nav aria-label="Page navigation example">
+				<ul class="pagination justify-content-center">
+
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},1,'First')}"></a>
+					</li>
+
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage -1},'Previous')}"></a>
+					</li>
+
+					<li th:class="${currentPage != i ? 'page-item' : 'page-item active'} "
+						th:each="i : ${#numbers.sequence(1,totalPages)}">
+						<a th:replace="~{fragments :: page_link(${moduleURL} , ${i} , ${i})}"></a>
+					</li>
+
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage+1},'Next')}"></a>
+					</li>
+
+					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${moduleURL},${totalPages},'Last')}"></a>
+					</li>
+
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+		<!-- <a> CUSTOM LINK FOR ENTITY -->
+			<a th:fragment="page_link(moduleURL,pageNum,label)" class="page-link"
+			th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword :''}}">[[${label}]]</a>
+
 </body>
 
 </html>

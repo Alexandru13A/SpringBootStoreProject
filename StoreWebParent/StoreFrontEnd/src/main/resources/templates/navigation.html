@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+
+
+<body>
+  <header class="container-fluid" th:fragment="page_navbar">
+    <div class="navigationbar">
+      <div class="logo">
+        <a th:href="@{/}">
+          <img th:src="@{/images/site/LOGOSTORE.png}" style="max-height: 60px; max-width: 60px; border-radius: 50px;" />
+        </a>
+      </div>
+
+
+      <ul class="links">
+        <li class="li nav-item dropdown">
+          <a class="a" href="#">Careers</a>
+        </li>
+        <li class="li nav-item dropdown">
+          <a class="a" href="#">Payments</a>
+        </li>
+        <li class="li nav-item dropdown">
+          <a class="a" href="#">Shipping & Delivery</a>
+        </li>
+        <li class="li nav-item dropdown">
+          <a class="a" href="#">Contact</a>
+        </li>
+      </ul>
+
+
+      <li class="li dropdown">
+        <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
+        &nbsp;
+        <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Login</a>
+        &nbsp;&nbsp;
+        <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Register</a>
+
+      </li>
+
+      <div class="toggle_btn">
+        <i class="fa-solid fa-bars"></i>
+      </div>
+    </div>
+
+    <div class="dropdown_menu">
+      <li class="li"><a class="a" href="#">Careers</a></li>
+      <li class="li"><a class="a" href="#">Payments</a></li>
+      <li class="li"><a class="a" href="#">Shipping & Delivery</a></li>
+      <li class="li"><a class="a" href="#">Contact</a></li>
+
+      <li class="li">
+        <a href="#" class="action-btn">Login</a>
+      </li>
+      <li class="li">
+        <a href="#" class="action-btn">Register</a>
+      </li>
+    </div>
+  </header>
+
+  <div th:fragment="search_nav" class="navigationbar">
+    <div id="searchNavbar">
+      <form class="form-inline" th:action="@{/search}" method="get">
+        <div class="input-group">
+          <input type="search" placeholder="Search" th:value="${keyword}" name="keyword" class="form-control" required />
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-success">Search</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+</body>
+
+</html>

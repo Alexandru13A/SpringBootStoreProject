@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ro.store.admin.brand.BrandService;
 import ro.store.admin.category.CategoryService;
-import ro.store.admin.product.ProductNotFoundException;
 import ro.store.admin.product.ProductSaveImpl;
 import ro.store.admin.product.ProductService;
 import ro.store.admin.user.security.StoreUserDetails;
@@ -26,6 +25,7 @@ import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.common.entity.Brand;
 import ro.store.common.entity.Category;
 import ro.store.common.entity.Product.Product;
+import ro.store.common.exception.product.ProductNotFoundException;
 
 @Controller
 public class ProductController {

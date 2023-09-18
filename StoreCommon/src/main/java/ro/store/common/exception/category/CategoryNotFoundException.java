@@ -1,4 +1,4 @@
-package ro.store.admin.category;
+package ro.store.common.exception.category;
 
 public class CategoryNotFoundException extends Exception {
 

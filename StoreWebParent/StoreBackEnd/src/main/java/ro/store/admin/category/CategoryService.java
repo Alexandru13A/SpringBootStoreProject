@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import ro.store.admin.category.util.CategoryPageInfo;
 import ro.store.common.entity.Category;
+import ro.store.common.exception.category.CategoryNotFoundException;
 
 @Service
 @Transactional

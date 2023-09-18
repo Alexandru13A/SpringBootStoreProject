@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ro.store.common.entity.Product.Product;
+import ro.store.common.exception.product.ProductNotFoundException;
 
 @Service
 @Transactional
