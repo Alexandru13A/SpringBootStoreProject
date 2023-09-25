@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-
-
 <body>
   <header class="container-fluid" th:fragment="page_navbar">
+
+    <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+      <input type="submit" />
+    </form>
+
     <div class="navbar">
       <div class="logo">
         <a th:href="@{/}">
@@ -94,10 +97,10 @@
           data-toggle="dropdown" th:href="@{/account}" sec:authentication="principal.fullName"></a>
 
         <div class="dropdown-menu" style="margin-left: 50px;">
-          <a th:href="@{/logout}" class="action-btn">Logout</a>
+          <a href="" id="logoutLink" class="action-btn">Logout</a>
         </div>
       </li>
-      
+
       <div class="toggle_btn">
         <i class="fa-solid fa-bars"></i>
       </div>
@@ -120,11 +123,12 @@
         <a style="color: black;" class="a" th:href="@{/account}" sec:authentication="principal.fullName"></a>
       </li>
       <li class="li">
-        <a th:href="@{/logout}" class="action-btn">Logout</a>
+        <a href="" id="logoutLink" class="action-btn">Logout</a>
       </li>
     </div>
-  </header>
 
+    <script th:src="@{/js/logout.js}"></script>
+  </header>
 
 </body>
 

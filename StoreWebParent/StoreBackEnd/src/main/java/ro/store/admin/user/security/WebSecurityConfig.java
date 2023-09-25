@@ -42,25 +42,27 @@ public class WebSecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf(csrf -> csrf.disable())
-				.authorizeHttpRequests((requests) -> requests
-						.requestMatchers("/users/**").hasAuthority("Admin")
-						.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
-						.requestMatchers("/products", "/products/", "products/detail/**", "/products/page/**")
-						.hasAnyAuthority("Admin", "Salesperson", "Editor", "Shipper")
-						.requestMatchers("/products/edit/**", "/products/save", "/products/check_unique")
-						.hasAnyAuthority("Admin", "Salesperson", "Editor")
-						.requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
-						.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
-						.requestMatchers("/images/**", "/js/**", "/webjars/**")
-						.permitAll()
-						.anyRequest()
-						.authenticated())
+		http.authorizeHttpRequests((requests) -> requests
+				.requestMatchers("/users/**", "/settings/**", "/countries/**", "/states/**").hasAuthority("Admin")
+				.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/products", "/products/", "products/detail/**", "/products/page/**")
+				.hasAnyAuthority("Admin", "Salesperson", "Editor", "Shipper")
+				.requestMatchers("/products/edit/**", "/products/save", "/products/check_unique")
+				.hasAnyAuthority("Admin", "Salesperson", "Editor")
+				.requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
+				.requestMatchers("/images/**", "/js/**", "/webjars/**")
+				.permitAll()
+				.anyRequest()
+				.authenticated())
 				.formLogin((form) -> form
 						.loginPage("/login")
 						.usernameParameter("email")
 						.permitAll())
-				.logout(logout -> logout.permitAll()).rememberMe((remember) -> remember.userDetailsService(userDetailsService));
+				.logout(logout -> logout
+						.logoutUrl("/logout")
+						.logoutSuccessUrl("/login?logout")
+						.permitAll());
 
 		return http.build();
 	}

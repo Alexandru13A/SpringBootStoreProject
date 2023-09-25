@@ -7,6 +7,7 @@ xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
 
 	<div class="container-fluid">
+
 		<header th:replace="~{navigation :: page_navbar}" />
 		<div>
 			<div >
@@ -21,6 +22,8 @@ xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 		</div>
 	</div>
+
+	<script th:src="@{/js/logout.js}"></script>
 
 </body>
 

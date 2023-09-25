@@ -6,9 +6,9 @@
 <body>
   <header class="container-fluid" th:fragment="page_navbar">
     <div class="navigationbar">
-      <div class="logo">
+      <div>
         <a th:href="@{/}">
-          <img th:src="@{/images/site/LOGOSTORE.png}" style="max-height: 60px; max-width: 60px; border-radius: 50px;" />
+          <img th:src="@{${SITE_LOGO}}" class="logo" />
         </a>
       </div>
 
