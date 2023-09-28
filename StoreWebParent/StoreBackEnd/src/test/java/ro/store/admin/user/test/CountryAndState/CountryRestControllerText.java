@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import ro.store.admin.CountryAndStates.CountryRepository;
+import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.common.entity.Country;
 
 @SpringBootTest

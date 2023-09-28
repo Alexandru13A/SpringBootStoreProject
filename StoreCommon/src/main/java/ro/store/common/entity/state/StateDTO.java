@@ -1,4 +1,4 @@
-package ro.store.admin.CountryAndStates;
+package ro.store.common.entity.state;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

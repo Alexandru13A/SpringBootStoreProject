@@ -1,4 +1,4 @@
-package ro.store.admin.CountryAndStates;
+package ro.store.countries_states_frontend;
 
 import java.util.List;
 

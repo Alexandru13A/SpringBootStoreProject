@@ -1,4 +1,4 @@
-package ro.store.common.entity;
+package ro.store.common.entity.state;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.entity.Country;
 
 @Entity
 @Table(name = "states")

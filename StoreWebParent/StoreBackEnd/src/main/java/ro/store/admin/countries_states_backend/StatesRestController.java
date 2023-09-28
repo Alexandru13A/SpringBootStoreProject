@@ -1,4 +1,4 @@
-package ro.store.admin.CountryAndStates;
+package ro.store.admin.countries_states_backend;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.store.common.entity.Country;
-import ro.store.common.entity.State;
+import ro.store.common.entity.state.State;
+import ro.store.common.entity.state.StateDTO;
 
 @RestController
 public class StatesRestController {

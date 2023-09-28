@@ -13,10 +13,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
-import ro.store.admin.CountryAndStates.CountryRepository;
-import ro.store.admin.CountryAndStates.StatesRepository;
+import ro.store.admin.countries_states_backend.CountryRepository;
+import ro.store.admin.countries_states_backend.StatesRepository;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.State;
+import ro.store.common.entity.state.State;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

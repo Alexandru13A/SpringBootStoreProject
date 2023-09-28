@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.store.common.entity.state.State;
 
 @Entity
 @Table(name = "countries")

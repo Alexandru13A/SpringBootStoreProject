@@ -36,6 +36,9 @@
         <li class="nav-item">
           <a class="nav-link" data-toggle="tab" href="#mailTemplates" role="tab">Mail Templates</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#payment" role="tab">Payment</a>
+        </li>
       </ul>
 
       <!-- Tab panes -->
@@ -54,12 +57,17 @@
         </div>
 
         <div class="tab-pane p-3" id="mailServer" role="tabpanel">
-          <h2>Mail Server</h2>
+          <div th:replace="~{settings/mail_server :: content}" />
         </div>
 
         <div class="tab-pane p-3" id="mailTemplates" role="tabpanel">
-          <h2>Mail Templates</h2>
+          <div th:replace="~{settings/mail_templates/mail_templates :: content}"></div>
         </div>
+
+        <div class="tab-pane p-3" id="payment" role="tabpanel">
+          <h2>Payment</h2>
+        </div>
+
       </div>
     </div>
 
@@ -82,6 +90,10 @@
     contextPath = "[[@{/}]]"
     var csrfHeaderName = "[[${_csrf.headerName}]]";
     var csrfValue = "[[${_csrf.token}]]";
+
+    $(document).ready(function(){
+      $("#customerVerificationTextContent").richText();
+    });
   </script>
   <script th:src="@{/js/common_form.js}"></script>
   <script th:src="@{/js/countries_setting.js}"></script>
