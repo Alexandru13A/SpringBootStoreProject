@@ -50,7 +50,7 @@
 					<label class="col-sm-4 col-form-label">Password</label>
 					<div class="col-sm-8">
 						<input type="password" th:field="*{password}" class="form-control"
-							placeholder="Leave blank if you dont want to change password" minlength="8" maxlength="28"
+							placeholder="Leave blank if you don't want to change password" minlength="8" maxlength="28"
 							oninput="checkPasswordMatch(confirmPassword(document.getElementById('confirmPassword')))" />
 					</div>
 				</div>
@@ -115,7 +115,8 @@
 			</div>
 		</div>
 
-		<div class="text-center" th:replace="~{fragments :: footer}"></div>
+
+    <div th:replace="~{fragments :: footer}"></div>
 
 
 	</div>

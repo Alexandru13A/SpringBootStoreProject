@@ -48,29 +48,38 @@
           </div>
 
           <div class="tab-pane" id="description" role="tabpanel">
-            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+            <th:block
+              th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')') }">
               <div th:replace="~{products/product_description :: content}" />
             </th:block>
 
-            <th:block sec:authorize="hasAnyAuthority('Salesperson')">
-              <div th:replace="~{products/product_description_readonly :: content}" />
+            <th:block
+              th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')') }">
+              <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                <div th:replace="~{products/product_description_readonly :: content}" />
+              </th:block>
             </th:block>
 
           </div>
 
           <div class=" tab-pane" id="images" role="tabpanel">
-            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+            <th:block
+              th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')') }">
               <div th:replace="~{products/product_image :: content}" />
             </th:block>
 
-            <th:block sec:authorize="hasAnyAuthority('Salesperson')">
-              <div th:replace="~{products/product_image_readonly :: content}" />
+            <th:block
+              th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')') }">
+              <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                <div th:replace="~{products/product_image_readonly :: content}" />
+              </th:block>
             </th:block>
 
           </div>
 
           <div class="tab-pane p-3" id="details" role="tabpanel">
-            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+            <th:block
+              th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')') }">
               <div th:replace="~{products/product_details :: content}" />
 
               <div>
@@ -79,18 +88,25 @@
               </div>
             </th:block>
 
-            <th:block sec:authorize="hasAnyAuthority('Salesperson')">
-              <div th:replace="~{products/product_details_readonly :: content}" />
+            <th:block
+              th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')') }">
+              <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                <div th:replace="~{products/product_details_readonly :: content}" />
+              </th:block>
             </th:block>
           </div>
 
           <div class="tab-pane p-3" id="shipping" role="tabpanel">
-            <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
+            <th:block
+              th:if="${#authorization.expression('hasAuthority(''Admin'')') || #authorization.expression('hasAuthority(''Editor'')') }">
               <div th:replace="~{products/product_shipping :: content}" />
             </th:block>
 
-            <th:block sec:authorize="hasAnyAuthority('Salesperson')">
-              <div th:replace="~{products/product_shipping_readonly :: content}" />
+            <th:block
+              th:if="${!#authorization.expression('hasAuthority(''Admin'')') && !#authorization.expression('hasAuthority(''Editor'')') }">
+              <th:block th:if="${#authorization.expression('hasAuthority(''Salesperson'')')}">
+                <div th:replace="~{products/product_shipping_readonly :: content}" />
+              </th:block>
             </th:block>
 
           </div>
@@ -107,8 +123,8 @@
 
 
     <div th:replace="~{modal_fragment :: modal_dialog}"></div>
-
-    <div class="text-center" th:replace="~{fragments :: footer}"></div>
+    <div th:replace="~{fragments :: footer}"></div>
+    
 
   </div>
 

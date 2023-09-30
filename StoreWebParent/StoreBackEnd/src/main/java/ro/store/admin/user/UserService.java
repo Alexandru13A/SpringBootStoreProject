@@ -3,13 +3,12 @@ package ro.store.admin.user;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.role.RoleRepository;
 import ro.store.common.entity.Role;
 import ro.store.common.entity.User;
@@ -18,42 +17,32 @@ import ro.store.common.entity.User;
 @Transactional
 public class UserService {
 	public static final int USERS_PER_PAGE = 5;
-	private final UserRepository userRepo;
-	private final RoleRepository roleRepo;
-	private final PasswordEncoder passwordEncoder;
+	@Autowired
+	private  UserRepository userRepo;
+	@Autowired
+	private  RoleRepository roleRepo;
+	@Autowired
+	private  PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepo, RoleRepository roleRepo, PasswordEncoder passwordEncoder) {
-		this.userRepo = userRepo;
-		this.roleRepo = roleRepo;
-		this.passwordEncoder = passwordEncoder;
+	public List<User> usersList(){
+		return userRepo.findAll();
 	}
+
 	//GET BY EMAIL
 	public User getUserByEmail(String email) {
 		return userRepo.getUserByEmail(email);
 	}
 
-	//GET ALL USERS
-	public List<User> usersList() {
-		return userRepo.findAll();
-	}
+	
 
 	//LIST USERS BY PAGE
-	public Page<User> listByPage(int pageNum, String sortField, String sortOrder, String keyword) {
-		Sort sort = Sort.by(sortField);
-
-		sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
-
-		PageRequest pageable = PageRequest.of(pageNum - 1, USERS_PER_PAGE, sort);
-
-		if (keyword != null) {
-			return userRepo.findAll(keyword, pageable);
-		}
-		return userRepo.findAll(pageable);
+	public void listByPage(int pageNum,PagingAndSortingHelper helper ) {
+		helper.listEntities(pageNum, USERS_PER_PAGE,userRepo);
 	}
 
 	//GET ALL ROLES
 	public List<Role> rolesList() {
-		return roleRepo.findAll();
+		return (List<Role>) roleRepo.findAll();
 	}
 
 	//SAVE USER

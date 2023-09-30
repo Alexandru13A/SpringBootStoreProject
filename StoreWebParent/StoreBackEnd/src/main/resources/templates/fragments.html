@@ -106,6 +106,17 @@
 		<a class="link-delete" th:href="@{'/users/delete/' + ${user.id}}" th:entityId="${user.id}"
 			title="Delete this User"><img th:src="@{/images/buttons/delete.png}" /></a>
 	</div>
+	<!--EDIT AND DELETE FOR Customers -->
+	<div th:fragment="customers_actions" th:remove="tag">
+		<a class="link-detail" th:href="@{'/customers/detail/'+${customer.id}}" title="View details of this customer"><img
+			style="width: 35px;height: 35px; margin-right: 5px;" th:src="@{/images/status/details.png}" /></a>
+
+		<a th:href="@{'/customers/edit/'+ ${customer.id}}" title="Edit this customer"><img th:src="@{/images/buttons/edit.png}" /> </a>
+		&nbsp;
+
+		<a class="link-delete" th:href="@{'/customers/delete/' + ${customer.id}}" th:entityId="${customer.id}"
+			title="Delete this Customer"><img th:src="@{/images/buttons/delete.png}" /></a>
+	</div>
 
 	<!--EDIT AND DELETE FOR BRANDS -->
 	<div th:fragment="brands_actions" th:remove="tag">
@@ -182,11 +193,7 @@
 			&nbsp;&nbsp;
 			<input type="button" value="Clear" class="btn btn-secondary" onclick="clearFilter()">
 		</form>
-
 	</div>
-
-
-
 
 </body>
 

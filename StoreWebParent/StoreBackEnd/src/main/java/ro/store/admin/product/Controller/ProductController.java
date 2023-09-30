@@ -110,10 +110,12 @@ public class ProductController {
       @RequestParam(name = "imageNames", required = false) String[] imageNames,
       @AuthenticationPrincipal StoreUserDetails loggedUSer) throws IOException {
 
-    if (loggedUSer.hasRole("Salesperson")) {
-      productService.saveProductPrice(product);
-      redirectAttributes.addFlashAttribute("message", "The Price has been updated successfully");
-      return "redirect:/products";
+    if (!loggedUSer.hasRole("Admin") && loggedUSer.hasRole("Editor")) {
+      if (loggedUSer.hasRole("Salesperson")) {
+        productService.saveProductPrice(product);
+        redirectAttributes.addFlashAttribute("message", "The Price has been updated successfully");
+        return "redirect:/products";
+      }
     }
 
     ProductSaveImpl.setMainImageName(mainImageMultipart, product);

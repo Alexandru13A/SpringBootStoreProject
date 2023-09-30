@@ -3,12 +3,10 @@ package ro.store.admin.brand;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Transient;
 import org.springframework.stereotype.Service;
 
+import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.common.entity.Brand;
 
 @Service
@@ -23,22 +21,11 @@ public class BrandService {
   }
 
   public List<Brand> getAllBrands() {
-    List<Brand> brands = repository.findAll();
-    return brands;
+    return repository.findAll();
   }
 
-  public Page<Brand> listBrandsByPage(int pageNum, String sortField, String sortOrder, String keyword) {
-
-    Sort sort = Sort.by(sortField);
-    sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
-
-    PageRequest pageable = PageRequest.of(pageNum - 1, BRAND_PER_PAGE, sort);
-
-    if (keyword != null) {
-      return repository.search(keyword, pageable);
-    }
-    return repository.findAll(pageable);
-
+  public void listBrandsByPage(int pageNum, PagingAndSortingHelper helper) {
+    helper.listEntities(pageNum, BRAND_PER_PAGE, repository);
   }
 
   public Brand save(Brand brand) {

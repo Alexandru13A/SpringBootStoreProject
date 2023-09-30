@@ -3,8 +3,6 @@ package ro.store.admin.brand.controller;
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -18,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ro.store.admin.brand.BrandNotFoundException;
 import ro.store.admin.brand.BrandService;
 import ro.store.admin.category.CategoryService;
+import ro.store.admin.common.paging.PagingAndSortingHelper;
+import ro.store.admin.common.paging.PagingAndSortingParam;
 import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.common.entity.Brand;
 import ro.store.common.entity.Category;
@@ -25,48 +25,24 @@ import ro.store.common.entity.Category;
 @Controller
 public class BrandController {
 
-  private BrandService service;
+  private BrandService brandService;
   private CategoryService catService;
 
-  public BrandController(BrandService service, CategoryService catService) {
-    this.service = service;
+  public BrandController(BrandService brandService, CategoryService catService) {
+    this.brandService = brandService;
     this.catService = catService;
   }
 
   @GetMapping("/brands")
   public String brandsFirstPage(Model model) {
-    return listBrandsByPage(1, model, "name", "asc", null);
+    return "redirect:/brands/page/1?sortField=name&sortOrder=asc";
   }
 
   @GetMapping("/brands/page/{pageNum}")
-  public String listBrandsByPage(@PathVariable("pageNum") int pageNum, Model model,
-      @Param("sortField") String sortField,
-      @Param("sortOrder") String sortOrder, @Param("keyword") String keyword) {
+  public String listBrandsByPage(@PathVariable("pageNum") int pageNum,
+      @PagingAndSortingParam(listName = "brands") PagingAndSortingHelper helper) {
 
-    Page<Brand> page = service.listBrandsByPage(pageNum, sortField, sortOrder, keyword);
-
-    List<Brand> brands = page.getContent();
-
-    long startCount = (pageNum - 1) * BrandService.BRAND_PER_PAGE + 1;
-    long endCount = startCount + BrandService.BRAND_PER_PAGE - 1;
-
-    if (endCount > page.getTotalElements()) {
-      endCount = page.getTotalElements();
-    }
-
-    String reverseSortOrder = sortOrder.equals("asc") ? "desc" : "asc";
-
-    model.addAttribute("currentPage", pageNum);
-    model.addAttribute("totalPages", page.getTotalPages());
-    model.addAttribute("startCount", startCount);
-    model.addAttribute("endCount", endCount);
-    model.addAttribute("totalItems", page.getTotalElements());
-    model.addAttribute("brands", brands);
-    model.addAttribute("sortField", sortField);
-    model.addAttribute("sortOrder", sortOrder);
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("reverseSortOrder", reverseSortOrder);
-
+    brandService.listBrandsByPage(pageNum, helper);
     return "/brands/brands";
   }
 
@@ -88,12 +64,12 @@ public class BrandController {
       String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
       brand.setLogo(fileName);
 
-      Brand savedBrand = service.save(brand);
+      Brand savedBrand = brandService.save(brand);
       String uploadDirectory = "brand-logos/" + savedBrand.getId();
       FileUploadUtil.cleanDirectory(uploadDirectory);
       FileUploadUtil.saveFile(uploadDirectory, fileName, multipartFile);
     } else {
-      service.save(brand);
+      brandService.save(brand);
     }
 
     redirectAttributes.addFlashAttribute("message", "Brand saved successfully");
@@ -104,10 +80,8 @@ public class BrandController {
   public String editBrand(@PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes) {
 
     try {
-      Brand brand = service.editBrandById(id);
+      Brand brand = brandService.editBrandById(id);
       List<Category> listCategories = catService.listCategoriesUsedInForm();
-
-
 
       model.addAttribute("brand", brand);
       model.addAttribute("listCategories", listCategories);
@@ -124,7 +98,7 @@ public class BrandController {
       Model model) {
 
     try {
-      service.delete(id);
+      brandService.delete(id);
       String brandDir = "/brand-logo/" + id;
       FileUploadUtil.removeDir(brandDir);
       redirectAttributes.addFlashAttribute("message", "The Brand with ID: " + id + " has been deleted successfully");
