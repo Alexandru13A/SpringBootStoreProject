@@ -6,9 +6,9 @@
 <body>
   <header class="container-fluid" th:fragment="page_navbar">
     <div class="navigationbar">
-      <div>
+      <div class="logo">
         <a th:href="@{/}">
-          <img th:src="@{${SITE_LOGO}}" class="logo" />
+          <img th:src="@{/images/site/LOGOSTORE.png}" style="max-height: 60px; max-width: 60px; border-radius: 50px;" />
         </a>
       </div>
 
@@ -34,7 +34,7 @@
         &nbsp;
         <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Login</a>
         &nbsp;&nbsp;
-        <a class="a" style="text-decoration: none;cursor: pointer;" th:href="@{/register}">Register</a>
+        <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Register</a>
 
       </li>
 
