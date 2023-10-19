@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ro.store.admin.customer.CustomerService;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.Customer;
 import ro.store.common.exception.customer.CustomerNotFoundException;
 
 @Controller

@@ -4,7 +4,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.AuthenticationType;
+import ro.store.common.entity.Customer.Customer;
+
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
@@ -18,6 +20,10 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
   @Modifying
   public void enabled(Integer id);
 
+  @Query("UPDATE Customer c SET c.authenticationType=?2 WHERE c.id = ?1")
+  @Modifying
+  public void updateAuthenticationType(Integer customerId, AuthenticationType type);
 
+  public Customer findByResetPasswordToken(String resetPasswordToken);
 
 }

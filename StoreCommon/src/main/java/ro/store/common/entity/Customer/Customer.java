@@ -1,9 +1,11 @@
-package ro.store.common.entity;
+package ro.store.common.entity.Customer;
 
 import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.entity.Country;
 
 @Entity
 @Table(name = "customers")
@@ -65,9 +68,21 @@ public class Customer {
   @Column(name = "created_time", length = 45)
   private Date createdTime;
 
+  @Enumerated(EnumType.STRING)
+  @Column(name="authenticationType",length = 10)
+  private AuthenticationType authenticationType;
+
   @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
+
+  @Column(name="reset_password_token",length = 30)
+  private String resetPasswordToken;
+
+  public Customer(Integer id){
+    this.id = id;
+  }
+
 
   public String getFullName() {
     return firstName + " " + lastName;

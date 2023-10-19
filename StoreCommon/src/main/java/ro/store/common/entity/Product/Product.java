@@ -89,13 +89,11 @@ public class Product {
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<ProductDetail> details = new ArrayList<>();
 
-  public Category getCategory() {
-    return this.category;
+
+  public Product(Integer id){
+    this.id = id;
   }
 
-  public void setCategory(Category category) {
-    this.category = category;
-  }
 
   @Transient
   public String getMainImagePath() {

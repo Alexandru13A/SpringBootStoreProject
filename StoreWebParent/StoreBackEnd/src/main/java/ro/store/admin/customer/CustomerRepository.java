@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 

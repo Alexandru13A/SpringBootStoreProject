@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import jakarta.transaction.Transactional;
 import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.Customer;
 import ro.store.common.exception.customer.CustomerNotFoundException;
 
 @Service
@@ -21,12 +21,17 @@ import ro.store.common.exception.customer.CustomerNotFoundException;
 public class CustomerService {
 
   public static final int CUSTOMER_PER_PAGE = 10;
-  @Autowired
-  private CustomerRepository customerRepository;
-  @Autowired
-  private CountryRepository countryRepository;
+
+  private final CustomerRepository customerRepository;
+  private final CountryRepository countryRepository;
+
   @Autowired
   private PasswordEncoder passwordEncoder;
+
+  public CustomerService(CustomerRepository customerRepository, CountryRepository countryRepository) {
+    this.customerRepository = customerRepository;
+    this.countryRepository = countryRepository;
+  }
 
   public Page<Customer> listByPage(int pageNum, String sortField, String sortOrder, String keyword) {
 
@@ -39,29 +44,30 @@ public class CustomerService {
     return customerRepository.findAll(pageable);
   }
 
-  public void saveCustomer(Customer customerInForm){
+  public void saveCustomer(Customer customerInForm) {
     Customer customerInDatabase = customerRepository.findById(customerInForm.getId()).get();
 
-
-    if(!customerInForm.getPassword().isEmpty()){
+    if (!customerInForm.getPassword().isEmpty()) {
       encodePassword(customerInForm);
-    }else{
+    } else {
       customerInForm.setPassword(customerInDatabase.getPassword());
     }
-      customerInForm.setEnabled(customerInDatabase.isEnabled());
-      customerInForm.setCreatedTime(customerInDatabase.getCreatedTime());
-      customerInForm.setVerificationCode(customerInDatabase.getVerificationCode());
+    customerInForm.setEnabled(customerInDatabase.isEnabled());
+    customerInForm.setCreatedTime(customerInDatabase.getCreatedTime());
+    customerInForm.setVerificationCode(customerInDatabase.getVerificationCode());
+    customerInForm.setAuthenticationType(customerInDatabase.getAuthenticationType());
+    customerInForm.setResetPasswordToken(customerInDatabase.getResetPasswordToken());
 
-      customerRepository.save(customerInForm);
+    customerRepository.save(customerInForm);
   }
 
-  public void deleteCustomer(Integer id) throws CustomerNotFoundException{
-      Long countById = customerRepository.countById(id);
+  public void deleteCustomer(Integer id) throws CustomerNotFoundException {
+    Long countById = customerRepository.countById(id);
 
-      if(countById == null || countById == 0){
-        throw new CustomerNotFoundException("Could not found any customer with ID: "+id);
-      }
-      customerRepository.deleteById(id);
+    if (countById == null || countById == 0) {
+      throw new CustomerNotFoundException("Could not found any customer with ID: " + id);
+    }
+    customerRepository.deleteById(id);
   }
 
   private void encodePassword(Customer customer) {
@@ -76,20 +82,21 @@ public class CustomerService {
       throw new CustomerNotFoundException("Could not found any product with ID: " + id);
     }
   }
+
   public boolean checkForUniqueEmail(Integer id, String email) {
     Customer existCustomer = customerRepository.findByEmail(email);
 
-    if(existCustomer != null && existCustomer.getId() != id){
+    if (existCustomer != null && existCustomer.getId() != id) {
       return false;
     }
     return true;
   }
 
-  public void updateStatus(Integer id, boolean enabled){
+  public void updateStatus(Integer id, boolean enabled) {
     customerRepository.updateCustomerStatus(id, enabled);
   }
 
-  public List<Country> listAllCountries(){
+  public List<Country> listAllCountries() {
     return countryRepository.findAllByOrderByNameAsc();
   }
 

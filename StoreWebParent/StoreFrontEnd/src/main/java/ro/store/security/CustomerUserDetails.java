@@ -5,11 +5,11 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.Customer;
 
 public class CustomerUserDetails implements UserDetails {
 
-  private Customer customer;
+  private  Customer customer;
 
   public CustomerUserDetails(Customer customer) {
     this.customer = customer;
@@ -54,6 +54,10 @@ public class CustomerUserDetails implements UserDetails {
 
   public String getFullName() {
     return customer.getFirstName() + " " + customer.getLastName();
+  }
+
+  public Customer getCustomer(){
+    return this.customer;
   }
 
 }

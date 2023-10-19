@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://org.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 
 
 <body>
   <header class="container-fluid" th:fragment="page_navbar">
+
+    <th:block sec:authorized="isAuthenticated()">
+      <form th:action="@{/logout}" method="post" th:hidden="true" name="logoutForm">
+        <input type="submit"  />
+      </form>
+    </th:block>
+
     <div class="navigationbar">
       <div class="logo">
         <a th:href="@{/}">
@@ -29,40 +36,89 @@
       </ul>
 
 
-      <li class="li dropdown">
-        <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
-        &nbsp;
-        <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Login</a>
-        &nbsp;&nbsp;
-        <a class="a" style="text-decoration: none;cursor: pointer;" href="#">Register</a>
+      <th:block sec:authorize="!isAuthenticated()">
+        <li class="li dropdown" style="margin-left: 40px;">
+          <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
+          &nbsp;
+          <a class="a" style="text-decoration: none;cursor: pointer;" th:href="@{/login}">Login</a>
+          &nbsp;&nbsp;
+          <a class="a" style="text-decoration: none;cursor: pointer;" th:href="@{/register}">Register</a>
+        </li>
+      </th:block>
 
-      </li>
+      <th:block sec:authorize="isAuthenticated()">
+        <li class="li dropdown" style="margin-left: 40px;">
+          <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
+          <a style=" text-decoration: none; color: black;cursor: pointer;" class="a dropdown-toggle"
+            data-toggle="dropdown" th:href="@{/account_details}" sec:authentication="principal.fullName"></a>
+          <div class="dropdown-menu" style="height: 240px; max-width: 150px;">
+            <a class="a dropdown-item" href="#">Addresses</a>
+            <a class="a dropdown-item" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/></a>
+            <a class="a dropdown-item" href="#">Orders</a>
+            <a class="a dropdown-item" href="#">Reviews</a>
+            <a class="a dropdown-item" href="#">Questions</a>
+            <hr>
+            <a id="logoutLinkHeader" class="action-btn" href="#">Logout</a>
+          </div>
+        </li>
+      </th:block>
 
       <div class="toggle_btn">
         <i class="fa-solid fa-bars"></i>
       </div>
     </div>
+    <th:block sec:authorize="!isAuthenticated()">
+      <div class="dropdown_menu">
+        <li class="li"><a class="a" href="#">Careers</a></li>
+        <li class="li"><a class="a" href="#">Payments</a></li>
+        <li class="li"><a class="a" href="#">Shipping & Delivery</a></li>
+        <li class="li"><a class="a" href="#">Contact</a></li>
+        <li class="li">
+          <hr>
+          <a th:href="@{/login}" class="action-btn">Login</a>
+        </li>
+        <li class="li">
+          <a th:href="@{/register}" class="action-btn">Register</a>
+        </li>
+      </div>
+    </th:block>
 
-    <div class="dropdown_menu">
-      <li class="li"><a class="a" href="#">Careers</a></li>
-      <li class="li"><a class="a" href="#">Payments</a></li>
-      <li class="li"><a class="a" href="#">Shipping & Delivery</a></li>
-      <li class="li"><a class="a" href="#">Contact</a></li>
+    <th:block sec:authorize="isAuthenticated()">
+      <div class="dropdown_menu">
+        <li class="li"><a class="a" href="#">Careers</a></li>
+        <li class="li"><a class="a" href="#">Payments</a></li>
+        <li class="li"><a class="a" href="#">Shipping & Delivery</a></li>
+        <li class="li"><a class="a" href="#">Contact</a></li>
+        <hr>
+        <li class="li" style="margin-right: 30px;">
+          <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
+          <a style="color: black;" class="a" th:href="@{/account_details}" sec:authentication="principal.fullName"></a>
+        </li>
 
-      <li class="li">
-        <a href="#" class="action-btn">Login</a>
-      </li>
-      <li class="li">
-        <a href="#" class="action-btn">Register</a>
-      </li>
-    </div>
+        <li class="li"><a class="a" href="#">Addresses</a></li>
+        <li class="li"><a class="a" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/> </a></li>
+        <li class="li"><a class="a" href="#">Orders</a></li>
+        <li class="li"><a class="a" href="#">Reviews</a></li>
+        <li class="li"><a class="a" href="#">Questions</a></li>
+        <hr>
+        <li class="li">
+          <a id="logoutLinkDropdown" class="action-btn" href="#">Logout</a>
+        </li>
+      </div>
+
+    </th:block>
+
+
+
+    <script th:src="@{/js/logout.js}"></script>
   </header>
 
   <div th:fragment="search_nav" class="navigationbar">
     <div id="searchNavbar">
       <form class="form-inline" th:action="@{/search}" method="get">
         <div class="input-group">
-          <input type="search" placeholder="Search" th:value="${keyword}" name="keyword" class="form-control" required />
+          <input type="search" placeholder="Search" th:value="${keyword}" name="keyword" class="form-control"
+            required />
           <div class="input-group-append">
             <button type="submit" class="btn btn-success">Search</button>
           </div>
@@ -70,9 +126,6 @@
       </form>
     </div>
   </div>
-
-
-
 </body>
 
 </html>

@@ -13,7 +13,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer;
+import ro.store.common.entity.Customer.AuthenticationType;
+import ro.store.common.entity.Customer.Customer;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)
@@ -47,6 +48,16 @@ public class CustomerRepositoryTest {
 
     assertThat(savedCustomer).isNotNull();
     assertThat(savedCustomer.getId()).isGreaterThan(0);
+
+  }
+
+  @Test
+  public void testUpdateAuthenticationType() {
+    Integer id = 14;
+    customerRepository.updateAuthenticationType(id, AuthenticationType.FACEBOOK);
+    Customer customer = customerRepository.findById(id).get();
+
+    assertThat(customer.getAuthenticationType()).isEqualTo(AuthenticationType.FACEBOOK);
 
   }
 
