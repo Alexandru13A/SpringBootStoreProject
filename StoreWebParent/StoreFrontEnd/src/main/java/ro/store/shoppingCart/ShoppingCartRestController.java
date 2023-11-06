@@ -1,5 +1,6 @@
 package ro.store.shoppingCart;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,6 +57,22 @@ public class ShoppingCartRestController {
     } catch (CustomerNotFoundException ex) {
       return "You must login to add this product to cart.";
     }
+  }
+
+  @DeleteMapping("/cart/remove/{productId}")
+  public String removeProduct(HttpServletRequest request, @PathVariable("productId")Integer productId){
+
+      try {
+         Customer customer = getAuthenticatedCustomer(request);
+         cartService.removeProduct(customer, productId);
+         return "Successfully removed.";
+      } catch (CustomerNotFoundException e) {
+       return "You most login to remove product";
+      }
+
+
+
+  
   }
 
 }

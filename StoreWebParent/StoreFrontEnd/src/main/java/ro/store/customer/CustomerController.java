@@ -118,19 +118,28 @@ public class CustomerController {
     return "customer/account_details";
   }
 
-
-
-  //save the changes from the Customer account details
+  // save the changes from the Customer account details
   @PostMapping("/update_account_details")
   public String updateAccountDetails(Model model, Customer customer, RedirectAttributes redirectAttributes,
       HttpServletRequest request) {
+
     customerService.updateCustomer(customer);
     redirectAttributes.addFlashAttribute("message", "Your account has been updated");
+
     updateNameForAuthenticatedCustomer(customer, request);
-    return "redirect:/account_details";
+
+    String redirectOption = request.getParameter("redirect");
+    String redirectURL = "redirect:/account_details";
+
+    if ("address_book".equals(redirectOption)) {
+      redirectURL = "redirect:/address_book";
+    }
+
+    return redirectURL;
   }
 
-  //Set the name from the authentication Facebook/Google with name from account details form
+  // Set the name from the authentication Facebook/Google with name from account
+  // details form
   private void updateNameForAuthenticatedCustomer(Customer customer, HttpServletRequest request) {
     Object principal = request.getUserPrincipal();
 
@@ -149,7 +158,7 @@ public class CustomerController {
     }
   }
 
-  //Get name from authentication with Facebook/Google
+  // Get name from authentication with Facebook/Google
   private CustomerUserDetails getCustomerUserDetailsObject(Object principal) {
     CustomerUserDetails userDetails = null;
     if (principal instanceof UsernamePasswordAuthenticationToken) {

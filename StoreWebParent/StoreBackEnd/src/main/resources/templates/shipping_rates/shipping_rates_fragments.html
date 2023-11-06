@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+  <!-- EDIT AND DELETE FOR CATEGORIES -->
+  <div th:fragment="shipping_rates_actions" th:remove="tag">
+    <a th:href="@{'/shipping_rates/edit/'+ ${rate.id}}" title="Edit this rate"><img
+        th:src="@{/images/buttons/edit.png}" /> </a>
+    &nbsp;
+      <a class="link-delete" th:href="@{'/shipping_rates/delete/' + ${rate.id}}" th:entityId="${rate.id}"
+        title="Delete this Rate">
+        <img th:src="@{/images/buttons/delete.png}" />
+      </a>
+   
+  </div>
+
+  <!-- STATUS -->
+  <div th:fragment="cod_support(entityName)" th:remove="tag">
+    <a th:if="${rate.codSupported == true}" th:href="@{'/shipping_rates/cod/'+${rate.id}+'/enabled/false'}"
+      th:title="'Disable this '+${entityName}"><img th:src="@{/images/status/accept.png}" /> </a>
+
+    <a th:if="${rate.codSupported == false}" th:href="@{'/shipping_rates/cod/'+${rate.id}+'/enabled/true'}"
+      th:title=" 'Enable this '+ ${entityName} "><img th:src="@{/images/status/cross.png}" /> </a>
+  </div>
+
+</body>
+
+</html>

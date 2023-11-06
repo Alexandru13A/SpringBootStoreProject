@@ -24,7 +24,7 @@ public class ProductController {
   private ProductService productService;
 
   @GetMapping("/c/{category_alias}")
-  public String viewCategotyFirstPage(@PathVariable("category_alias") String alias,
+  public String viewCategoryFirstPage(@PathVariable("category_alias") String alias,
       Model model) {
     return viewCategoryByPage(alias, 1, model);
 

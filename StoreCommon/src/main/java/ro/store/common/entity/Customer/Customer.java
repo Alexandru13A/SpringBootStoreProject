@@ -12,6 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,23 +70,50 @@ public class Customer {
   private Date createdTime;
 
   @Enumerated(EnumType.STRING)
-  @Column(name="authenticationType",length = 10)
+  @Column(name = "authenticationType", length = 10)
   private AuthenticationType authenticationType;
 
   @ManyToOne
   @JoinColumn(name = "country_id")
   private Country country;
 
-  @Column(name="reset_password_token",length = 30)
+  @Column(name = "reset_password_token", length = 30)
   private String resetPasswordToken;
 
-  public Customer(Integer id){
+  public Customer(Integer id) {
     this.id = id;
   }
 
-
   public String getFullName() {
     return firstName + " " + lastName;
+  }
+
+  @Transient
+  public String getAddress() {
+    String address = firstName;
+    if (lastName != null && !lastName.isEmpty())
+      address += " " + lastName;
+
+    if (!addressLine1.isEmpty())
+      address += ",  " + addressLine1;
+
+    if (addressLine2 != null && !addressLine2.isEmpty())
+      address += ",  " + addressLine2;
+
+    if (!city.isEmpty())
+      address += ", City: " + city;
+
+    if (state != null && !state.isEmpty())
+      address += ", State: " + state;
+
+    address += ", Country: " + country.getName();
+
+    if (!postalCode.isEmpty())
+      address += ". Postal Code:  " + postalCode;
+    if (!phoneNumber.isEmpty())
+      address += ". Phone Number:  " + phoneNumber;
+
+    return address;
   }
 
   @Override

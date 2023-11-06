@@ -52,7 +52,7 @@
           <a style=" text-decoration: none; color: black;cursor: pointer;" class="a dropdown-toggle"
             data-toggle="dropdown" th:href="@{/account_details}" sec:authentication="principal.fullName"></a>
           <div class="dropdown-menu" style="height: 240px; max-width: 150px;">
-            <a class="a dropdown-item" href="#">Addresses</a>
+            <a class="a dropdown-item" th:href="@{/address_book}">Address</a>
             <a class="a dropdown-item" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/></a>
             <a class="a dropdown-item" href="#">Orders</a>
             <a class="a dropdown-item" href="#">Reviews</a>
@@ -95,7 +95,7 @@
           <a style="color: black;" class="a" th:href="@{/account_details}" sec:authentication="principal.fullName"></a>
         </li>
 
-        <li class="li"><a class="a" href="#">Addresses</a></li>
+        <li class="li"><a class="a" th:href="@{/address_book}">Addresses</a></li>
         <li class="li"><a class="a" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/> </a></li>
         <li class="li"><a class="a" href="#">Orders</a></li>
         <li class="li"><a class="a" href="#">Reviews</a></li>

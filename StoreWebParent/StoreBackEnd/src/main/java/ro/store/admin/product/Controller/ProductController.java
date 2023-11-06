@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,10 +42,10 @@ public class ProductController {
 
   @GetMapping("/products/page/{pageNum}")
   public String listProductsByPage(@PathVariable("pageNum") int pageNum, Model model,
-      @Param("sortField") String sortField,
-      @Param("sortOrder") String sortOrder,
-      @Param("keyword") String keyword,
-      @Param("categoryId") Integer categoryId) {
+      @RequestParam("sortField") String sortField,
+      @RequestParam("sortOrder") String sortOrder,
+      @RequestParam("keyword") String keyword,
+      @RequestParam("categoryId") Integer categoryId) {
 
     Page<Product> page = productService.listProductByPage(pageNum, sortField, sortOrder, keyword, categoryId);
     List<Product> products = page.getContent();

@@ -78,7 +78,7 @@ public class UserController {
 			service.saveUser(user);
 		}
 
-		redirectAttributes.addFlashAttribute("message", "The user has been saved  seuccessfully");
+		redirectAttributes.addFlashAttribute("message", "The user has been saved  successfully");
 		return getRedirectUrlToAffectedUser(user);
 	}
 

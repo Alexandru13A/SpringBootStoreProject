@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head('Shipping Rates- Store Admin','none')}" />
+
+<body>
+  <div class="container-fluid">
+    <header th:replace="~{navigation :: page_navbar}" />
+
+    <div>
+      <h2>Manage Shipping Rates</h2>
+      <a th:href="@{/shipping_rates/new}" style="text-decoration: none; cursor: pointer;">New Rate</a>
+    </div>
+
+
+    <div th:replace="~{fragments :: search_form('/shipping_rates/page/1')}" />
+
+    <div th:if="${message != null}" class="alert alert-success text-center">
+      [[${message}]]
+    </div>
+
+    <div>
+
+      <table class="table table-bordered table-striped table-hover table-responsive-xl">
+
+        <thead class="thead-dark">
+          <tr>
+            <th th:replace="~{fragments :: column_link('/shipping_rates','id','Rate ID')}" />
+            <th th:replace="~{fragments :: column_link('/shipping_rates','country','Country')}" />
+            <th th:replace="~{fragments :: column_link('/shipping_rates','state','State')}" />
+            <th th:replace="~{fragments :: column_link('/shipping_rates','rate','Rate')}" />
+            <th th:replace="~{fragments :: column_link('/shipping_rates','days','Days')}" />
+            <th th:replace="~{fragments :: column_link('/shipping_rates','codSupported','COD Supported')}" />
+            <th></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr th:each="rate : ${shippingRates}">
+            <td>[[${rate.id}]]</td>
+            <td>[[${rate.country.name}]]</td>
+            <td>[[${rate.state}]]</td>
+            <td>[[${rate.rate}]]</td>
+            <td>[[${rate.days}]]</td>
+            <td>
+              <div th:replace="~{shipping_rates/shipping_rates_fragments :: cod_support('rate')}" />
+            </td>
+            <td>
+              <div th:replace="~{shipping_rates/shipping_rates_fragments :: shipping_rates_actions}"></div>
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+
+    <div th:replace="~{fragments :: pagination('/shipping_rates','shipping rate')}"></div>
+
+    <div th:replace="~{modal_fragment :: confirm_modal}"></div>
+
+    <div th:replace="~{modal_fragment :: modal_dialog}"></div>
+
+    <div th:replace="~{fragments :: footer}"></div>
+
+  </div>
+
+
+  <script th:src="@{/js/common_list.js}"></script>
+  <script type="text/javascript">
+    moduleURL = "[[@{/shipping_rates}]]"
+
+    $(document).ready(function () {
+      $(".link-delete").on("click", function (e) {
+        e.preventDefault();
+        showDeleteConfirmModal($(this), 'shipping rate');
+      });
+    });
+  </script>
+
+</body>
+
+</html>

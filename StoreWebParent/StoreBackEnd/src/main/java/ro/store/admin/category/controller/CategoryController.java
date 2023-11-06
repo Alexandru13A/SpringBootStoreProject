@@ -38,8 +38,8 @@ public class CategoryController {
   }
 
   @GetMapping("/categories/page/{pageNum}")
-  public String listByPage(@PathVariable(name = "pageNum") int pageNum, @Param("sortOrder") String sortOrder,
-      @Param("keyword") String keyword, Model model) {
+  public String listByPage(@PathVariable(name = "pageNum") int pageNum, @RequestParam("sortOrder") String sortOrder,
+      @RequestParam("keyword") String keyword, Model model) {
     if (sortOrder == null || sortOrder.isEmpty()) {
       sortOrder = "asc";
     }

@@ -13,9 +13,9 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-2" th:each="category : ${categories}">
+			<div class="col" th:each="category : ${categories}">
 
-				<div><img style="max-width: 80px;max-height: auto;" th:src="@{${category.imagePath}}"/></div>
+				<div><img th:src="@{${category.imagePath}}" width="80"/></div>
 				<div>
 				<a th:href="@{'/c/'+${category.alias}}">[[${category.name}]]</a>
 				</div>
