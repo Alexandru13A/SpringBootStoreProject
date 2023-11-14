@@ -1,4 +1,4 @@
-package ro.store.admin.customer.Controller;
+package ro.store.admin.customer.controller;
 
 import java.util.List;
 

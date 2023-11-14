@@ -2,7 +2,6 @@ package ro.store.customer;
 
 import java.io.UnsupportedEncodingException;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -26,7 +25,6 @@ public class ForgotPasswordController {
   private final CustomerService customerService;
   private final SettingService settingService;
 
-  @Autowired
   public ForgotPasswordController(CustomerService customerService, SettingService settingService) {
     this.customerService = customerService;
     this.settingService = settingService;

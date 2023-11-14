@@ -29,7 +29,6 @@ public class CustomerService {
     this.passwordEncoder = passwordEncoder;
   }
 
-  @Autowired
   public CustomerService(CountryRepository countryRepository, CustomerRepository customerRepository) {
     this.countryRepository = countryRepository;
     this.customerRepository = customerRepository;

@@ -1,4 +1,4 @@
-package ro.store.admin.customer.Controller;
+package ro.store.admin.customer.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
