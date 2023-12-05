@@ -14,7 +14,7 @@
 
 		<div class="row m-1">
 			<div class="col-sm-8">
-				<th:block tH:each="item, status : ${cartItems}">
+				<th:block th:each="item, status : ${cartItems}">
 					<div class="row border rounded p-1" th:with="product =${item.product}" th:id="'row'+${status.count}">
 
 						<div class="col-1">
@@ -78,11 +78,12 @@
 			</div>
 		</div>
 
-		<div th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : 'd-none'}" id="sectionEmptyCartText">
+		<div th:class="'text-center' + ${#lists.isEmpty(cartItems) ? '' : ' d-none'}" id="sectionEmptyCartText">
 			<div>&nbsp;</div>
-			<h3>You have not have any product in cart yet</h3>
+			<h3>You have not chosen any product yet</h3>
 			<div>&nbsp;</div>
 		</div>
+
 
 		<div th:replace="~{footer_nav :: footer_menu}"></div>
 		<div th:replace="~{fragments :: footer}"></div>

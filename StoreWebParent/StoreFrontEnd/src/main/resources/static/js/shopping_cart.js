@@ -93,7 +93,6 @@ function showEmptyShoppingCart() {
 
 function removeProduct(link) {
   url = link.attr("href");
-  alert(url);
 
   $.ajax({
     type: "DELETE",
