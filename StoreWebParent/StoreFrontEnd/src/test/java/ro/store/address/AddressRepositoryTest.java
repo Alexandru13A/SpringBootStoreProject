@@ -44,4 +44,12 @@ public class AddressRepositoryTest {
     assertThat(savedAddress.getId()).isGreaterThan(0);
 
   }
+
+  @Test
+  public void testGetDefault() {
+    Integer customerId = 14;
+    Address address = repository.findDefaultByCustomer(customerId);
+    assertThat(address).isNotNull();
+    System.out.println(address);
+  }
 }
