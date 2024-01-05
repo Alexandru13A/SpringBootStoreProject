@@ -74,11 +74,11 @@ public class ShippingRateController {
   public String editRate(@PathVariable("id") Integer id, Model model, RedirectAttributes re) {
 
     try {
-      ShippingRate rate = shippingRateService.get(id);
+      ShippingRate shippingRate = shippingRateService.get(id);
       List<Country> listCountries = shippingRateService.listAllCountries();
 
       model.addAttribute("listCountries", listCountries);
-      model.addAttribute("rate", rate);
+      model.addAttribute("shippingRate", shippingRate);
       model.addAttribute("pageTitle", "Edit Rate ID: " + id);
       return "shipping_rates/shipping_rate_form";
 

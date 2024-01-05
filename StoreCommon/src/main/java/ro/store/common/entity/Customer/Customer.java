@@ -109,9 +109,9 @@ public class Customer {
     address += ", Country: " + country.getName();
 
     if (!postalCode.isEmpty())
-      address += ". Postal Code:  " + postalCode;
+      address += ", Postal Code:  " + postalCode;
     if (!phoneNumber.isEmpty())
-      address += ". Phone Number:  " + phoneNumber;
+      address += ", Phone Number:  " + phoneNumber;
 
     return address;
   }

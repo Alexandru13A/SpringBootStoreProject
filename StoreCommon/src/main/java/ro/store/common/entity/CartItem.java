@@ -27,6 +27,9 @@ public class CartItem {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
 
+  @Transient
+  private float shippingCost;
+
   @ManyToOne
   @JoinColumn(name = "customer_id")
   private Customer customer;
@@ -38,9 +41,17 @@ public class CartItem {
   private int quantity;
 
   @Transient
-  public float getSubtotal(){
+  public float getSubtotal() {
     return product.getDiscountPrice() * quantity;
   }
 
+  @Transient
+  public float getShippingCost() {
+    return shippingCost;
+  }
+
+  public void setShippingCost(float shippingCost) {
+    this.shippingCost = shippingCost;
+  }
 
 }

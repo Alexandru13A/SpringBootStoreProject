@@ -14,7 +14,7 @@
 			<h2>Manage Shipping Rates | [[${pageTitle}]]</h2>
 		</div>
 
-		<form th:action="@{/shipping_rates/save}" method="post" style="max-width: 700px; margin:0 auto" th:object="${rate}">
+		<form th:action="@{/shipping_rates/save}" method="post" style="max-width: 700px; margin:0 auto" th:object="${shippingRate}">
 
 			<input type="hidden" th:field="*{id}" />
 
@@ -77,12 +77,8 @@
 		<div class="text-center" th:replace="~{fragments :: footer}"></div>
 	</div>
 	<script type="text/javascript">
-
 		contextPath = "[[@{/}]]"
 		moduleURL = "[[@{/shipping_rates}]]";
-
-		
-
 	</script>
 
 	<script th:src="@{/js/common_form.js}"></script>
