@@ -25,19 +25,18 @@
 <body>
 
 	<!-- COLUMN FOR ENTITY TABLE -->
-	<th th:fragment="column_link(moduleURL,fieldName,columnLabel)">
-		<a class="text-white" th:href="@{${moduleURL}+'/page/'+${currentPage}+'?sortField='+ ${fieldName} +'&sortOrder='+${sortField != fieldName ? sortOrder : reverseSortOrder} 
-			+ ${keyword != null ? '&keyword='+keyword :''}}">
+	<th th:fragment="column_link(fieldName, columnLabel, removeTag)" th:remove="${removeTag}">
+		<a class="text-white"
+			th:href="@{${moduleURL} + '/page/' + ${currentPage} + '?sortField=' + ${fieldName}  +'&sortDir=' + ${sortField != fieldName ? sortDir : reverseSortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">
 			[[${columnLabel}]]
 		</a>
-		<span th:if="${sortField == fieldName}" th:class="${sortOrder =='asc' ? 'fa fa-sort-up' : 'fa fa-sort-down'}">
-		</span>
+		<span th:if="${sortField == fieldName}"
+			th:class="${sortDir == 'asc' ? 'fas fa-sort-up' : 'fas fa-sort-down'}"></span>
 	</th>
 
-
 	<!-- <a> CUSTOM LINK FOR ENTITY -->
-	<a th:fragment="page_link(moduleURL,pageNum,label)" class="page-link"
-		th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword :''}}">[[${label}]]</a>
+	<a th:fragment="page_link(pageNum, label)" class="page-link"
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} + '?sortField=' + ${sortField} + '&sortDir=' + ${sortDir} + ${keyword != null ? '&keyword=' + keyword : ''} + ${categoryId != null ? '&categoryId=' + categoryId : ''}}">[[${label}]]</a>
 
 	<!-- PAGE FOOTER -->
 	<div th:fragment="footer" class="text-center m-3">
@@ -45,41 +44,36 @@
 	</div>
 
 	<!-- ENTITY PAGINATION (NUMBER OF PAGES) -->
-	<div th:fragment="pagination(moduleURL,entityName)" th:remove="tag">
-
+	<div th:fragment="pagination(entityName)" th:remove="tag">
 		<div class="text-center m-1" th:if="${totalItems > 0}">
-			<span>[[${entityName}]] from : [[${startCount}]] to [[${endCount}]] of [[${totalItems}]] </span>
+			<span>Showing [[${entityName}]] # [[${startCount}]] to [[${endCount}]] of [[${totalItems}]]</span>
 		</div>
-
 		<div class="text-center m-1" th:unless="${totalItems > 0}">
 			<span>No [[${entityName}]] found</span>
 		</div>
 
 		<div th:if="${totalPages > 1}">
-			<nav aria-label="Page navigation example">
-				<ul class="pagination justify-content-center">
-
+			<nav>
+				<ul class="pagination justify-content-center flex-wrap">
 					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments :: page_link(${moduleURL},1,'First')}"></a>
+						<a th:replace="~{fragments :: page_link(1, 'First')}"></a>
+					</li>
+					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
+						<a th:replace="~{fragments :: page_link(${currentPage - 1}, 'Previous')}"></a>
 					</li>
 
-					<li th:class="${currentPage > 1 ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage -1},'Previous')}"></a>
-					</li>
-
-					<li th:class="${currentPage != i ? 'page-item' : 'page-item active'} "
-						th:each="i : ${#numbers.sequence(1,totalPages)}">
-						<a th:replace="~{fragments :: page_link(${moduleURL} , ${i} , ${i})}"></a>
+					<li th:class="${currentPage != i ? 'page-item': 'page-item active'}"
+						th:each="i : ${#numbers.sequence(1, totalPages)}">
+						<a th:replace="~{fragments :: page_link(${i}, ${i})}"></a>
 					</li>
 
 					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments :: page_link(${moduleURL},${currentPage+1},'Next')}"></a>
+						<a th:replace="~{fragments :: page_link(${currentPage + 1}, 'Next')}"></a>
 					</li>
 
 					<li th:class="${currentPage < totalPages ? 'page-item' : 'page-item disabled'}">
-						<a th:replace="~{fragments :: page_link(${moduleURL},${totalPages},'Last')}"></a>
+						<a th:replace="~{fragments :: page_link(${totalPages}, 'Last')}"></a>
 					</li>
-
 				</ul>
 			</nav>
 		</div>
@@ -100,7 +94,8 @@
 
 	<!--EDIT AND DELETE FOR USERS -->
 	<div th:fragment="users_actions" th:remove="tag">
-		<a th:href="@{'/users/edit/'+ ${user.id}}" title="Edit this user"><img th:src="@{/images/buttons/edit.png}" /> </a>
+		<a th:href="@{'/users/edit/'+ ${user.id}}" title="Edit this user"><img th:src="@{/images/buttons/edit.png}" />
+		</a>
 		&nbsp;
 
 		<a class="link-delete" th:href="@{'/users/delete/' + ${user.id}}" th:entityId="${user.id}"
@@ -108,10 +103,12 @@
 	</div>
 	<!--EDIT AND DELETE FOR Customers -->
 	<div th:fragment="customers_actions" th:remove="tag">
-		<a class="link-detail" th:href="@{'/customers/detail/'+${customer.id}}" title="View details of this customer"><img
-			style="width: 35px;height: 35px; margin-right: 5px;" th:src="@{/images/status/details.png}" /></a>
+		<a class="link-detail" th:href="@{'/customers/detail/'+${customer.id}}"
+			title="View details of this customer"><img style="width: 35px;height: 35px; margin-right: 5px;"
+				th:src="@{/images/status/details.png}" /></a>
 
-		<a th:href="@{'/customers/edit/'+ ${customer.id}}" title="Edit this customer"><img th:src="@{/images/buttons/edit.png}" /> </a>
+		<a th:href="@{'/customers/edit/'+ ${customer.id}}" title="Edit this customer"><img
+				th:src="@{/images/buttons/edit.png}" /> </a>
 		&nbsp;
 
 		<a class="link-delete" th:href="@{'/customers/delete/' + ${customer.id}}" th:entityId="${customer.id}"
@@ -120,12 +117,14 @@
 
 	<!--EDIT AND DELETE FOR BRANDS -->
 	<div th:fragment="brands_actions" th:remove="tag">
-		<a th:href="@{'/brands/edit/'+ ${brand.id}}" title="Edit this Brand"><img th:src="@{/images/buttons/edit.png}" />
+		<a th:href="@{'/brands/edit/'+ ${brand.id}}" title="Edit this Brand"><img
+				th:src="@{/images/buttons/edit.png}" />
 		</a>
 		&nbsp;
 		<a class="link-delete" th:href="@{'/brands/delete/' + ${brand.id}}" th:entityId="${brand.id}"
 			title="Delete this Brand"><img th:src="@{/images/buttons/delete.png}" /></a>
 	</div>
+
 	<!--EDIT AND DELETE FOR Products -->
 	<div th:fragment="products_actions" th:remove="tag">
 		<a class="link-detail" th:href="@{'/products/detail/'+${product.id}}" title="View details of this product"><img
@@ -157,10 +156,10 @@
 
 
 	<!-- SEARCH FRAGMENT -->
-	<div th:fragment="search_form(moduleURL)">
-		<form th:action="@{${moduleURL}}" class="form-inline m-3">
+	<div th:fragment="search_form()">
+		<form th:action="@{${moduleURL}+'/page/1'}" class="form-inline m-3">
 			<input type="hidden" name="sortField" th:value="${sortField}" />
-			<input type="hidden" name="sortOrder" th:value="${sortOrder}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
 
 			Filter:&nbsp;
 			<input type="search" name="keyword" th:value="${keyword}" class="form-control" required />
@@ -174,15 +173,16 @@
 
 	<!-- Search For Products -->
 	<div th:fragment="search_form_categories(moduleURL)">
-		<form th:action="@{${moduleURL}}" class="form-inline m-3" id="searchProductsByCategory">
+		<form th:action="@{${moduleURL}+'/page/1'}" class="form-inline m-3" id="searchProductsByCategory">
 			<input type="hidden" name="sortField" th:value="${sortField}" />
-			<input type="hidden" name="sortOrder" th:value="${sortOrder}" />
+			<input type="hidden" name="sortDir" th:value="${sortDir}" />
 
 			Category:&nbsp;
 			<select class="form-control" name="categoryId" id="dropdownCategory">
 				<option value="0">All Categories</option>
 				<th:block th:each="category :${categories}">
-					<option th:value="${category.id}" th:selected="(${categoryId}== ${category.id})">[[${category.name}]]</option>
+					<option th:value="${category.id}" th:selected="(${categoryId}== ${category.id})">
+						[[${category.name}]]</option>
 				</th:block>
 			</select>
 			&nbsp;&nbsp;

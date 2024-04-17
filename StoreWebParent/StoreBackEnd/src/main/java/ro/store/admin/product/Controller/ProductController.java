@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import ro.store.admin.brand.BrandService;
 import ro.store.admin.category.CategoryService;
+import ro.store.admin.common.paging.PagingAndSortingHelper;
+import ro.store.admin.common.paging.PagingAndSortingParam;
 import ro.store.admin.product.ProductSaveImpl;
 import ro.store.admin.product.ProductService;
 import ro.store.admin.user.security.StoreUserDetails;
@@ -28,6 +29,9 @@ import ro.store.common.exception.product.ProductNotFoundException;
 
 @Controller
 public class ProductController {
+
+  private String defaultRedirectURL = "redirect:/products/page/1?sortField=name&sortDir=asc&categoryId=0";
+
   @Autowired
   private ProductService productService;
   @Autowired
@@ -35,48 +39,31 @@ public class ProductController {
   @Autowired
   private CategoryService categoryService;
 
+
   @GetMapping("/products")
   public String listFirstPAge(Model model) {
-    return listProductsByPage(1, model, "name", "asc", null, 0);
+    return defaultRedirectURL;
+    //listProductsByPage(1, model, "name", "asc", null, 0);
   }
+
 
   @GetMapping("/products/page/{pageNum}")
-  public String listProductsByPage(@PathVariable("pageNum") int pageNum, Model model,
-      @RequestParam("sortField") String sortField,
-      @RequestParam("sortOrder") String sortOrder,
-      @RequestParam("keyword") String keyword,
-      @RequestParam("categoryId") Integer categoryId) {
+	public String listByPage(
+			@PagingAndSortingParam(listName = "products", moduleURL = "/products") PagingAndSortingHelper helper,
+			@PathVariable(name = "pageNum") int pageNum, Model model,
+			Integer categoryId
+			) {
+		
+		productService.listProductsByPage(pageNum, helper, categoryId);
+		
+		List<Category> listCategories = categoryService.listCategoriesUsedInForm();
+		
+		if (categoryId != null) model.addAttribute("categoryId", categoryId);
+		model.addAttribute("categories", listCategories);
+		
+		return "products/products";		
+	}
 
-    Page<Product> page = productService.listProductByPage(pageNum, sortField, sortOrder, keyword, categoryId);
-    List<Product> products = page.getContent();
-    List<Category> categories = categoryService.listCategoriesUsedInForm();
-
-    long startCount = (pageNum - 1) * ProductService.PRODUCT_PER_PAGE + 1;
-    long endCount = startCount + ProductService.PRODUCT_PER_PAGE - 1;
-
-    if (endCount > page.getTotalElements()) {
-      endCount = page.getTotalElements();
-    }
-
-    String reverseSortOrder = sortOrder.equals("asc") ? "desc" : "asc";
-
-    if (categories != null)
-      model.addAttribute("categoryId", categoryId);
-
-    model.addAttribute("currentPage", pageNum);
-    model.addAttribute("totalPages", page.getTotalPages());
-    model.addAttribute("startCount", startCount);
-    model.addAttribute("endCount", endCount);
-    model.addAttribute("totalItems", page.getTotalElements());
-    model.addAttribute("products", products);
-    model.addAttribute("categories", categories);
-    model.addAttribute("sortField", sortField);
-    model.addAttribute("sortOrder", sortOrder);
-    model.addAttribute("keyword", keyword);
-    model.addAttribute("reverseSortOrder", reverseSortOrder);
-
-    return "/products/products";
-  }
 
   // Send the Product object in the form and his assigned brands
   @GetMapping("/products/new")

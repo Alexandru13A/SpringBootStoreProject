@@ -22,7 +22,7 @@
           <div class="card-body">
             <p>
               <b>Ship to:</b> &nbsp; [[${shippingAddress}]]
-              <a th:href="@{/address_book}">[Ship to another address]</a>
+              <a th:href="@{/address_book(redirect=checkout)}">[Ship to another address]</a>
             </p>
             <p>
               <b>Days to deliver: </b> [[${checkoutInfo.deliverDays}]] day(s)
@@ -39,12 +39,17 @@
           </div>
           <div class="card-body">
             <div th:if="${checkoutInfo.codSupported}">
-              <p>
-                <input type="radio" /> Cash on delivery (COD)
-                &nbsp;
-                <button class="btn btn-primary">Place order with COD</button>
-              </p>
+              <form th:action="@{/place_order}" method="post">
+                <p>
+                  <input type="radio" name="paymentMethod" id="radioCOD" value="COD" /> Cash on delivery (COD)
+                  &nbsp;
+                  <button class="btn btn-primary d-none" id="buttonSubmit" type="submit">Place order with COD</button>
+                </p>
+              </form>
             </div>
+
+            <div id="paypal-button-container"> </div>
+
           </div>
         </div>
       </div>
@@ -73,7 +78,10 @@
                     </td>
                   </tr>
                 </th:block>
-                <tr><td colspan="3"><hr/></tr>
+                <tr>
+                  <td colspan="3">
+                    <hr />
+                </tr>
               </table>
             </div>
 
@@ -94,19 +102,85 @@
             <div class="row mt-2">
               <div class="col">Payment Total:</div>
               <div class="col">
-              <b>  <div th:replace="~{fragments :: format_currency(${checkoutInfo.paymentTotalForOrder})}" />  </b> 
+                <b>
+                  <div th:replace="~{fragments :: format_currency(${checkoutInfo.paymentTotalForOrder})}" />
+                </b>
               </div>
             </div>
 
           </div>
         </div>
       </div>
+    </div>
+
+    <div th:replace="~{footer_nav :: footer_menu}"></div>
+    <div th:replace="~{fragments :: footer}"></div>
 
 
-      <div th:replace="~{footer_nav :: footer_menu}"></div>
-      <div th:replace="~{fragments :: footer}"></div>
+    <script th:src="@{https://www.paypal.com/sdk/js(client-id=${paypalClientId},currency=${currencyCode})}"></script>
+
+    <script type="text/javascript">
+      contextPath = "[[@{/}]]";
+
+      var csrfHeaderName = "[[${_csrf.headerName}]]";
+      var csrfValue = "[[${_csrf.token}]]";
+
+      $(document).ready(function () {
+        $("#radioCOD").on("click", function () {
+          $("#buttonSubmit").removeClass("d-none");
+        });
+      });
+
+      paypal.Buttons({
+
+        createOrder: function (data, actions) {
+          //setup transaction
+          return actions.order.create({
+            intent: 'CAPTURE',           //make payment immediately
+            payer: {
+              name: {
+                given_name: "[[${customer.firstName}]]",
+                surname: "[[${customer.lastName}]]"
+              },
+              address: {
+                address_line_1: "[[${customer.addressLine1}]]",
+                address_line_2: "[[${customer.addressLine2}]]",
+                admin_area_1: "[[${customer.state}]]",
+                admin_area_2: "[[${customer.city}]]",
+                postal_code: "[[${customer.postalCode}]]",
+                country_code: "[[${customer.country.code}]]"
+              },
+              email_address: "[[${customer.email}]]",
+              phone: {
+                phone_type: "MOBILE",
+                phone_number: {
+                  national_number: "[[${customer.phoneNumber}]]"
+                }
+              }
+            },
+
+            purchase_units: [{
+              amount: {
+                value: "[[${checkoutInfo.paymentTotalForPayPal}]]",
+                currency_code: "[[${currencyCode}]]"
+              }
+            }]
+          });
+        },
+        onApprove: function (data, actions) {
+          //buyer approves payment
+        },
+        onCancel: function (data) {
+          //buyer cancels payment
+        },
+        onError: function (error) {
+          //error that prevents buyer from doing checkout
+        }
 
 
+      }).render("#paypal-button-container");
+
+    </script>
 </body>
 
 </html>

@@ -12,43 +12,50 @@ public class EmailSettingBag extends SettingBag {
   }
 
   public String getHost(){
-    return super.getvalue("MAIL_HOST");
+    return super.getValue("MAIL_HOST");
   }
 
   public Integer getPort(){
-    return Integer.parseInt(super.getvalue("MAIL_PORT"));
+    return Integer.parseInt(super.getValue("MAIL_PORT"));
   }
   
   public String getUsername(){
-    return super.getvalue("MAIL_USERNAME");
+    return super.getValue("MAIL_USERNAME");
   }
   
   public String getPassword(){
-    return super.getvalue("MAIL_PASSWORD");
+    return super.getValue("MAIL_PASSWORD");
   }
   
   public String getSmtpAuth(){
-    return super.getvalue("SMTP_AUTH");
+    return super.getValue("SMTP_AUTH");
   }
   
   public String getSmtpSecured(){
-    return super.getvalue("SMTP_SECURED");
+    return super.getValue("SMTP_SECURED");
   }
   
   public String getFromAddress(){
-    return super.getvalue("MAIL_FROM");
+    return super.getValue("MAIL_FROM");
   }
   
   public String getSenderName(){
-    return super.getvalue("MAIL_SENDER_NAME");
+    return super.getValue("MAIL_SENDER_NAME");
   }
   
   public String getCustomerVerifySubject(){
-    return super.getvalue("CUSTOMER_VERIFY_SUBJECT");
+    return super.getValue("CUSTOMER_VERIFY_SUBJECT");
   }
   
   public String getCustomerVerifyContent(){
-    return super.getvalue("CUSTOMER_VERIFY_CONTENT");
+    return super.getValue("CUSTOMER_VERIFY_CONTENT");
+  }
+
+    public String getOrderConfirmationSubject(){
+    return super.getValue("ORDER_CONFIRMATION_SUBJECT");
+  }
+    public String getOrderConfirmationContent(){
+    return super.getValue("ORDER_CONFIRMATION_CONTENT");
   }
   
 

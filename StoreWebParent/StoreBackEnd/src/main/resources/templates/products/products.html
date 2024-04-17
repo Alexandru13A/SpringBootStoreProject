@@ -19,20 +19,23 @@
       </th:block>
     </div>
 
+
+    <div th:replace="~{fragments :: search_form_categories('/products')}" />
+
+
     <div th:if="${message != null}" class="alert alert-success text-center">
       [[${message}]]
     </div>
 
-    <div th:replace="~{fragments :: search_form_categories('/products/page/1')}" />
 
     <table class="table table-bordered table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
-          <th th:replace="~{fragments :: column_link('/products','id','ID')}" />
+          <th th:replace="~{fragments :: column_link('id','ID','tag')}" />
           <th>Principal Image</th>
-          <th th:replace="~{fragments :: column_link('/products','name','Product Name')}" />
-          <th th:replace="~{fragments :: column_link('/products','brand','Brand')}" />
-          <th th:replace="~{fragments :: column_link('/products','category','Category')}" />
+          <th th:replace="~{fragments :: column_link('name','Product Name','none')}" />
+          <th th:replace="~{fragments :: column_link('brand','Brand','tag')}" />
+          <th th:replace="~{fragments :: column_link('category','Category','tag')}" />
 
           <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
             <th>Enabled</th>
@@ -85,7 +88,7 @@
     </div>
   </div>
 
-  <div th:replace="~{fragments :: pagination('/products','products')}" />
+  <div th:replace="~{fragments :: pagination('products')}" />
   <div th:replace="~{fragments :: footer}"></div>
 
   </div>

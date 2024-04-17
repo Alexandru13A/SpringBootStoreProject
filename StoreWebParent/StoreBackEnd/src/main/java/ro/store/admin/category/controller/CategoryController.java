@@ -38,8 +38,8 @@ public class CategoryController {
   }
 
   @GetMapping("/categories/page/{pageNum}")
-  public String listByPage(@PathVariable(name = "pageNum") int pageNum, @RequestParam("sortOrder") String sortOrder,
-      @RequestParam("keyword") String keyword, Model model) {
+  public String listByPage(@PathVariable(name = "pageNum") int pageNum, String sortOrder,
+      String keyword, Model model) {
     if (sortOrder == null || sortOrder.isEmpty()) {
       sortOrder = "asc";
     }
@@ -61,12 +61,14 @@ public class CategoryController {
     model.addAttribute("endCount", endCount);
     model.addAttribute("currentPage", pageNum);
     model.addAttribute("sortField", "name");
-    model.addAttribute("sortOrder", sortOrder);
+    model.addAttribute("sortDir", sortOrder);
     model.addAttribute("keyword", keyword);
 
     model.addAttribute("categories", categories);
     model.addAttribute("reverseSortOrder", reverseSortOrder);
-    return "/categories/categories";
+    model.addAttribute("moduleURL", "/categories");
+    
+    return "categories/categories";
 
   }
 

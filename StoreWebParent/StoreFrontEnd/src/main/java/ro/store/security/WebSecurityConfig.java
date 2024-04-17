@@ -62,7 +62,7 @@ public class WebSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests(
 				(requests) -> requests.requestMatchers("/css/**", "/images/**", "/js/**", "/webjars/**").permitAll()
-						.requestMatchers("/account_details", "/update_account_details", "/cart", "/address_book/**")
+						.requestMatchers("/account_details", "/update_account_details", "/cart", "/address_book/**","/checkout","/place_order")
 						.authenticated().anyRequest().permitAll())
 				.formLogin(login -> login.loginPage("/login")
 						.usernameParameter("email")

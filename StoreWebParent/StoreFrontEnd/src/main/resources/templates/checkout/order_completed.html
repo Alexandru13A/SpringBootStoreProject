@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://org.thymeleaf.org">
+
+<head th:replace="~{fragments :: page_head('Store ','none')}" />
+
+<body>
+	<div class="container-fluid">
+		<header th:replace="~{navigation :: page_navbar}" />
+		<header th:replace="~{navigation :: search_nav}" />
+
+		<div class="text-center border border-secondary rounded m-3 p-3">
+			<h2>Your Order has been completed</h2>
+			<h4>A confirmation email has been sent to you.</h4>
+			<h4>Check your email for details.</h4>
+		</div>
+
+
+
+		<div th:replace="~{footer_nav :: footer_menu}"></div>
+		<div th:replace="~{fragments :: footer}"></div>
+
+
+	</div>
+	</div>
+
+
+</body>
+
+</html>

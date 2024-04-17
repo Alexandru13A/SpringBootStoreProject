@@ -1,5 +1,7 @@
 package ro.store.utility;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Properties;
 
 import org.springframework.mail.javamail.JavaMailSenderImpl;
@@ -9,6 +11,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 
 import jakarta.servlet.http.HttpServletRequest;
 import ro.store.security.oauth2.CustomerOAuth2User;
+import ro.store.setting.CurrencySettingBag;
 import ro.store.setting.EmailSettingBag;
 
 public class Utility {
@@ -57,6 +60,37 @@ public class Utility {
     }
 
     return customerEmail;
+  }
+
+  public static String formatCurrency(float amount, CurrencySettingBag currencySettingBag) {
+
+    String symbol = currencySettingBag.getCurrencySymbol();
+    String symbolPosition = currencySettingBag.getCurrencySymbolPosition();
+    String decimalPointType = currencySettingBag.getCurrencyDecimalPointType();
+    String thousandsPointType = currencySettingBag.getCurrencyThousandsPointType();
+    int decimalDigits = currencySettingBag.getCurrencyDecimalDigits();
+
+    String pattern = symbolPosition.equals("Before price") ? symbol : "";
+    pattern += "###,###";
+
+    if (decimalDigits > 0) {
+      pattern += ".";
+      for (int count = 1; count <= decimalDigits; count++)
+        pattern += "#";
+    }
+
+    pattern += symbolPosition.equals("After price") ? symbol : "";
+
+    char decimalSeparator = decimalPointType.equals("POINT") ? '.' : ',';
+    char thousandsSeparator = thousandsPointType.equals("POINT") ? '.' : ',';
+
+    DecimalFormatSymbols decimalFormatSymbols = DecimalFormatSymbols.getInstance();
+    decimalFormatSymbols.setDecimalSeparator(decimalSeparator);
+    decimalFormatSymbols.setGroupingSeparator(thousandsSeparator);
+
+    DecimalFormat formatter = new DecimalFormat(pattern, decimalFormatSymbols);
+
+    return formatter.format(amount);
   }
 
 }

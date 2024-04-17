@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.common.entity.Country;
 import ro.store.common.entity.Customer.Customer;
@@ -24,7 +22,6 @@ public class CustomerService {
 
   private final CustomerRepository customerRepository;
   private final CountryRepository countryRepository;
-
   @Autowired
   private PasswordEncoder passwordEncoder;
 
@@ -33,16 +30,9 @@ public class CustomerService {
     this.countryRepository = countryRepository;
   }
 
-  public Page<Customer> listByPage(int pageNum, String sortField, String sortOrder, String keyword) {
-
-    Sort sort = Sort.by(sortField);
-    sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
-    PageRequest pageable = PageRequest.of(pageNum - 1, CUSTOMER_PER_PAGE, sort);
-    if (keyword != null) {
-      return customerRepository.findAll(keyword, pageable);
-    }
-    return customerRepository.findAll(pageable);
-  }
+  public void listByPage(int pageNum, PagingAndSortingHelper helper) {
+		helper.listEntities(pageNum, CUSTOMER_PER_PAGE, customerRepository);
+	}
 
   public void saveCustomer(Customer customerInForm) {
     Customer customerInDatabase = customerRepository.findById(customerInForm.getId()).get();

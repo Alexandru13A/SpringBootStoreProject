@@ -21,16 +21,16 @@
       [[${message}]]
     </div>
 
-    <div th:replace="~{fragments :: search_form('/brands/page/1')}" />
+    <div th:replace="~{fragments :: search_form}" />
 
    
 
         <table class="table table-bordered table-hover table-responsive-xl">
           <thead class="thead-dark">
             <tr>
-              <th>ID</th>
-              <th>Brand Logo</th>
-              <th th:replace="~{fragments :: column_link('/brands','name','Brand Name')}" />
+              <th class="hideable-column">ID</th>
+              <th>Logo</th>
+              <th th:replace="~{fragments :: column_link('name','Brand Name','none')}" />
               <th>Categories</th>
               <th></th>
             </tr>
@@ -38,7 +38,7 @@
 
           <tbody th:each="brand : ${brands}">
 
-            <td th:text="${brand.id}"></td>
+            <td class="hideable-column">[[${brand.id}]]</td>
             <td>
               <img style="max-width: 80px; max-height: 80px;" th:src="@{${brand.getImagePath}}" class="img-fluid" />
             </td>
@@ -58,14 +58,7 @@
       </div>
 
 
-      <div th:if="${keyword !=null}" class="text-center">
-        <span>Search result does not show categories in hierarchial form </span>
-        <div th:replace="~{fragments :: pagination('/brands','brands')}"></div>
-      </div>
-  
-      <th:block th:unless="${keyword != null}">
-        <div th:replace="~{fragments :: pagination('/brands','top-level brands')}"></div>
-      </th:block>
+      <div th:replace="~{fragments :: pagination('brands')}"></div>
 
       <div th:replace="~{modal_fragment :: confirm_modal}"></div>
 

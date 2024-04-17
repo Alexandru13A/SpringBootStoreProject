@@ -27,8 +27,7 @@ public class ShippingRateController {
     this.shippingRateService = shippingRateService;
   }
 
-  private String defaultRedirectURL = "redirect:/shipping_rates/page/1?sortField=id&sortOrder=asc";
-
+  private String defaultRedirectURL = "redirect:/shipping_rates/page/1?sortField=country&sortDir=asc";
   
 
   @GetMapping("/shipping_rates")
@@ -38,7 +37,7 @@ public class ShippingRateController {
 
   @GetMapping("shipping_rates/page/{pageNum}")
   public String listByPage(
-      @PagingAndSortingParam(listName = "shippingRates") PagingAndSortingHelper helper,
+      @PagingAndSortingParam(listName = "shippingRates",moduleURL = "/shipping_rates") PagingAndSortingHelper helper,
       @PathVariable("pageNum") int pageNum) {
 
     shippingRateService.listByPage(pageNum, helper);

@@ -9,5 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(PARAMETER)
 public @interface PagingAndSortingParam {
+    public String moduleURL();
     public String listName();
+
 }

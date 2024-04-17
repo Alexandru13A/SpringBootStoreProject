@@ -27,6 +27,7 @@ import ro.store.common.entity.User;
 @Controller
 public class UserController {
 
+	private String defaultRedirectURL = "redirect:/users/page/1?sortField=firstName&sortDir=asc";
 	private final UserService service;
 
 	public UserController(UserService service) {
@@ -35,15 +36,16 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String listFirstPage() {
-			return "redirect:/users/page/1?sortField=firstName&sortOrder=asc";
+		return defaultRedirectURL;
 	}
 
 	// LIST USERS BY PAGE
 	@GetMapping("/users/page/{pageNum}")
-	public String listByPage(@PagingAndSortingParam(listName = "users") PagingAndSortingHelper helper,
-			@PathVariable("pageNum") int pageNum) {
-			 service.listByPage(pageNum, helper);
-				return "/users/users";
+	public String listByPage(
+			@PagingAndSortingParam(listName = "users", moduleURL = "/users") PagingAndSortingHelper helper,
+			@PathVariable(name = "pageNum") int pageNum) {
+		service.listByPage(pageNum, helper);
+		return "users/users";
 	}
 
 	@GetMapping("/users/new")
@@ -56,7 +58,7 @@ public class UserController {
 		model.addAttribute("rolesList", rolesList);
 		model.addAttribute("pageTitle", "Create new User");
 
-		return "/users/user_form";
+		return "users/user_form";
 	}
 
 	@PostMapping("/users/save")
@@ -96,10 +98,10 @@ public class UserController {
 			model.addAttribute("user", user);
 			model.addAttribute("rolesList", rolesList);
 			model.addAttribute("pageTitle", "Edit User (ID: " + id + " )");
-			return "/users/user_form";
+			return "users/user_form";
 		} catch (UserNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
-			return "redirect:/users";
+			return defaultRedirectURL;
 		}
 
 	}
@@ -115,7 +117,7 @@ public class UserController {
 		} catch (UserNotFoundException e) {
 			redirectAttributes.addFlashAttribute("message", e.getMessage());
 		}
-		return "redirect:/users";
+		return defaultRedirectURL;
 
 	}
 
@@ -128,7 +130,7 @@ public class UserController {
 		String message = "The user ID " + id + " has been " + status;
 		redirectAttributes.addFlashAttribute("message", message);
 
-		return "redirect:/users";
+		return defaultRedirectURL;
 	}
 
 	@GetMapping("/users/export/csv")

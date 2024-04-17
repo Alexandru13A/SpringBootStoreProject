@@ -6,11 +6,11 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.common.entity.Product.Product;
 import ro.store.common.exception.product.ProductNotFoundException;
 
@@ -20,35 +20,42 @@ public class ProductService {
   @Autowired
   private ProductRepository repository;
 
-  public static final int PRODUCT_PER_PAGE = 5;
+  public static final int PRODUCTS_PER_PAGE = 5;
 
   public List<Product> productsList() {
     return repository.findAll();
   }
 
-  public Page<Product> listProductByPage(int pageNum, String sortField, String sortOrder, String keyword,
-      Integer categoryId) {
+  public void listProductsByPage(int pageNum, PagingAndSortingHelper helper, Integer categoryId) {
+    Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+		String keyword = helper.getKeyword();
+		Page<Product> page = null;
+		
+		if (keyword != null && !keyword.isEmpty()) {
+			if (categoryId != null && categoryId > 0) {
+				String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+				page = repository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
+			} else {
+				page = repository.findAll(keyword, pageable);
+			}
+		} else {
+			if (categoryId != null && categoryId > 0) {
+				String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
+				page = repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
+			} else {		
+				page = repository.findAll(pageable);
+			}
+		}
+		
+		helper.updateModelAttributes(pageNum, page);
+	}	
 
-    Sort sort = Sort.by(sortField);
-    sort = sortOrder.equals("asc") ? sort.ascending() : sort.descending();
-
-    PageRequest pageable = PageRequest.of(pageNum - 1, PRODUCT_PER_PAGE, sort);
-
-    if (keyword != null && !keyword.isEmpty()) {
-      if (categoryId != null && categoryId > 0) {
-        String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-        return repository.searchInCategory(categoryId, categoryIdMatch, keyword, pageable);
-      }
-      return repository.findAll(keyword, pageable);
-    }
-
-    if (categoryId != null && categoryId > 0) {
-      String categoryIdMatch = "-" + String.valueOf(categoryId) + "-";
-      return repository.findAllInCategory(categoryId, categoryIdMatch, pageable);
-    }
-    return repository.findAll(pageable);
-
-  }
+  public void searchProducts(int pageNum, PagingAndSortingHelper helper) {
+		Pageable pageable = helper.createPageable(PRODUCTS_PER_PAGE, pageNum);
+		String keyword = helper.getKeyword();		
+		Page<Product> page = repository.searchProductsByName(keyword, pageable);		
+		helper.updateModelAttributes(pageNum, page);
+	}
 
   public Product saveProduct(Product product) {
     if (product.getId() == null) {

@@ -20,17 +20,21 @@ public class BrandService {
     this.repository = repository;
   }
 
+
   public List<Brand> getAllBrands() {
     return repository.findAll();
   }
+
 
   public void listBrandsByPage(int pageNum, PagingAndSortingHelper helper) {
     helper.listEntities(pageNum, BRAND_PER_PAGE, repository);
   }
 
+
   public Brand save(Brand brand) {
     return repository.save(brand);
   }
+
 
   public Brand getBrandById(Integer id) throws BrandNotFoundException {
 
@@ -41,6 +45,7 @@ public class BrandService {
     }
   }
 
+
   public void delete(Integer id) throws BrandNotFoundException {
     Long countById = repository.countById(id);
 
@@ -50,6 +55,7 @@ public class BrandService {
     repository.deleteById(id);
   }
 
+
   public Brand editBrandById(Integer id) throws BrandNotFoundException {
     try {
       return repository.findById(id).get();
@@ -57,6 +63,7 @@ public class BrandService {
       throw new BrandNotFoundException("Could not find any brand with ID: " + id);
     }
   }
+  
 
   public String checkUnique(Integer id, String name) {
     boolean isCreatingNew = (id == null || id == 0);

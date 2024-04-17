@@ -51,6 +51,23 @@ public class SettingRepositoryTest {
   }
 
   @Test
+  public void orderConfirmationMailSettings(){
+    Setting orderConfirmationContent = new Setting("ORDER_CONFIRMATION_CONTENT"," ",SettingCategory.MAIL_TEMPLATES);
+    Setting orderConfirmationSubject = new Setting("ORDER_CONFIRMATION_SUBJECT"," ",SettingCategory.MAIL_TEMPLATES);
+
+     repository
+        .saveAll(List.of(orderConfirmationContent,orderConfirmationSubject));
+  }
+  @Test
+  public void orderPaymentSettings(){
+    Setting paypalApiURL = new Setting("PAYPAL_API_BASE_URL"," ",SettingCategory.PAYMENT);
+    Setting paypalApiClientId = new Setting("PAYPAL_API_CLIENT_ID"," ",SettingCategory.PAYMENT);
+    Setting paypalApiClientSecret = new Setting("PAYPAL_API_CLIENT_SECRET"," ",SettingCategory.PAYMENT);
+
+  repository.saveAll(List.of(paypalApiURL,paypalApiClientId,paypalApiClientSecret));
+  }
+
+  @Test
   public void testListSettingsByCategory() {
     List<Setting> settings = repository.findByCategory(SettingCategory.GENERAL);
     settings.forEach(System.out :: println);

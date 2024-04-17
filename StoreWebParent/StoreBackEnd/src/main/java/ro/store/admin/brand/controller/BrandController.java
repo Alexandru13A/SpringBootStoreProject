@@ -25,8 +25,10 @@ import ro.store.common.entity.Category;
 @Controller
 public class BrandController {
 
+  private String defaultRedirectURL = "redirect:/brands/page/1?sortField=name&sortDir=asc";
   private BrandService brandService;
   private CategoryService catService;
+
 
   public BrandController(BrandService brandService, CategoryService catService) {
     this.brandService = brandService;
@@ -35,16 +37,17 @@ public class BrandController {
 
   @GetMapping("/brands")
   public String brandsFirstPage(Model model) {
-    return "redirect:/brands/page/1?sortField=name&sortOrder=asc";
+    return defaultRedirectURL;
   }
 
   @GetMapping("/brands/page/{pageNum}")
-  public String listBrandsByPage(@PathVariable("pageNum") int pageNum,
-      @PagingAndSortingParam(listName = "brands") PagingAndSortingHelper helper) {
-
-    brandService.listBrandsByPage(pageNum, helper);
-    return "/brands/brands";
-  }
+	public String listByPage(
+			@PagingAndSortingParam(listName = "brands", moduleURL = "/brands") PagingAndSortingHelper helper,
+			@PathVariable(name = "pageNum") int pageNum
+			) {
+		brandService.listBrandsByPage(pageNum, helper);
+		return "brands/brands";		
+	}
 
   @GetMapping("/brands/new")
   public String newBrand(Model model) {

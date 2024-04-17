@@ -65,7 +65,7 @@
         </div>
 
         <div class="tab-pane p-3" id="payment" role="tabpanel">
-          <h2>Payment</h2>
+          <div th:replace="~{settings/payment :: content}"></div>
         </div>
 
       </div>
@@ -93,6 +93,7 @@
 
     $(document).ready(function(){
       $("#customerVerificationTextContent").richText();
+      $("#orderConfirmationContent").richText();
     });
   </script>
   <script th:src="@{/js/common_form.js}"></script>

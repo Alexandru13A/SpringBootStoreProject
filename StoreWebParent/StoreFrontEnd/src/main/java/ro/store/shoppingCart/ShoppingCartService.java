@@ -61,4 +61,8 @@ public class ShoppingCartService {
     cartItemRepository.deleteByCustomerAndProduct(customer.getId(), productId);
   }
 
+  public void deleteByCustomer(Customer customer){
+    cartItemRepository.deleteByCustomer(customer.getId());
+  }
+
 }

@@ -21,20 +21,20 @@
       [[${message}]]
     </div>
 
-    <div th:replace="~{fragments :: search_form('/customers/page/1')}" />
+    <div th:replace="~{fragments :: search_form}" />
 
     <table class="table table-bordered table-hover table-striped table-responsive-xl">
 
       <thead class="thead-dark">
         <tr>
-          <th th:replace="~{fragments :: column_link('/customers','id','ID')}" />
-          <th th:replace="~{fragments :: column_link('/customers','email','Email')}" />
-          <th th:replace="~{fragments :: column_link('/customers','firstName','First Name')}" />
-          <th th:replace="~{fragments :: column_link('/customers','lastName','Last Name')}" />
-          <th th:replace="~{fragments :: column_link('/customers','city','City')}" />
-          <th th:replace="~{fragments :: column_link('/customers','state','State')}" />
-          <th th:replace="~{fragments :: column_link('/customers','country.name','Country')}" />
-          <th th:replace="~{fragments :: column_link('/customers','enabled','Enabled')}" />
+          <th th:replace="~{fragments :: column_link('id','ID','none')}" />
+          <th th:replace="~{fragments :: column_link('email','Email','none')}" />
+          <th th:replace="~{fragments :: column_link('firstName','First Name','none')}" />
+          <th th:replace="~{fragments :: column_link('lastName','Last Name','none')}" />
+          <th th:replace="~{fragments :: column_link('city','City','none')}" />
+          <th th:replace="~{fragments :: column_link('state','State','none')}" />
+          <th th:replace="~{fragments :: column_link('country.name','Country',none)}" />
+          <th th:replace="~{fragments :: column_link('enabled','Enabled','none')}" />
           <th></th>
         </tr>
       </thead>
@@ -71,7 +71,7 @@
     </div>
   </div>
   
-  <div th:replace="~{fragments :: pagination('/customers','customers')}"/>
+  <div th:replace="~{fragments :: pagination('customers')}"/>
   <div th:replace="~{fragments :: footer}"/>
 
   </div>

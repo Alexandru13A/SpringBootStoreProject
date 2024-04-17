@@ -37,7 +37,8 @@ public class OrderController {
   }
 
   @GetMapping("/orders/page/{pageNum}")
-  public String listByPage(@PagingAndSortingParam(listName = "listOrders") PagingAndSortingHelper helper,
+  public String listByPage(
+      @PagingAndSortingParam(listName = "listOrders",moduleURL = "/orders") PagingAndSortingHelper helper,
       @PathVariable(name = "pageNum") int pageNum, HttpServletRequest request) {
 
     orderService.listByPage(pageNum, helper);
