@@ -1,9 +1,9 @@
 package ro.store.admin.user.test.order;
 
-
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Date;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +19,7 @@ import ro.store.common.entity.Product.Product;
 import ro.store.common.entity.order.Order;
 import ro.store.common.entity.order.OrderDetail;
 import ro.store.common.entity.order.OrderStatus;
+import ro.store.common.entity.order.OrderTrack;
 import ro.store.common.entity.order.PaymentMethod;
 
 @DataJpaTest
@@ -31,10 +32,8 @@ public class OrderRepositoryTest {
   @Autowired
   private TestEntityManager entityManager;
 
-
-
   @Test
-  public void testAddNewOrderWithSingleProduct(){
+  public void testAddNewOrderWithSingleProduct() {
 
     Customer customer = entityManager.find(Customer.class, 14);
 
@@ -47,7 +46,7 @@ public class OrderRepositoryTest {
     mainOrder.setLastName(customer.getLastName());
     mainOrder.setPhoneNumber(customer.getPhoneNumber());
     mainOrder.setAddress1(customer.getAddressLine1());
-    if(customer.getAddressLine2() != null){
+    if (customer.getAddressLine2() != null) {
       mainOrder.setAddress2(customer.getAddressLine2());
     }
 
@@ -55,7 +54,6 @@ public class OrderRepositoryTest {
     mainOrder.setState(customer.getState());
     mainOrder.setCountry(customer.getCountry().getName());
     mainOrder.setPostalCode(customer.getPostalCode());
-
 
     mainOrder.setShippingCost(10);
     mainOrder.setProductCost(product.getCost());
@@ -84,10 +82,33 @@ public class OrderRepositoryTest {
 
     assertThat(saveOrder.getId()).isGreaterThan(0);
 
-
-
   }
 
-  
+  @Test
+  public void testUpdateOrderTracks() {
+    Integer orderId = 8;
+    Order order = orderRepository.findById(orderId).get();
+
+    OrderTrack newTrack = new OrderTrack();
+    newTrack.setOrder(order);
+    newTrack.setUpdatedTime(new Date());
+    newTrack.setStatus(OrderStatus.NEW);
+    newTrack.setNotes(OrderStatus.NEW.defaultDescription());
+
+    OrderTrack processingTrack = new OrderTrack();
+    processingTrack.setOrder(order);
+    processingTrack.setUpdatedTime(new Date());
+    processingTrack.setStatus(OrderStatus.PROCESSING);
+    processingTrack.setNotes(OrderStatus.PROCESSING.defaultDescription());
+
+    List<OrderTrack> orderTracks = order.getOrderTracks();
+    orderTracks.add(newTrack);
+    orderTracks.add(processingTrack);
+
+    Order updateOrder = orderRepository.save(order);
+
+    assertThat(updateOrder.getOrderTracks()).hasSizeGreaterThan(1);
+
+  }
 
 }

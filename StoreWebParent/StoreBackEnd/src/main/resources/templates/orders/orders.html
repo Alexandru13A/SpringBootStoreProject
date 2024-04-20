@@ -13,7 +13,7 @@
 
 		<div>
 
-			<div th:replace="~{orders/order_fragments :: search_form('/orders/page/1')}" />
+			<div th:replace="~{orders/order_fragments :: search_form('/orders')}" />
 
 			<div th:if="${message !=null}" class="alert alert-success text-center">
 				[[${message}]]
@@ -26,19 +26,19 @@
 				<thead class="thead-dark">
 
 					<tr>
-						<th th:replace="~{fragments :: column_link('/orders', 'id','ID')}" />
+						<th th:replace="~{fragments :: column_link('id','ID','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','customer','Customer')}" />
+						<th th:replace="~{fragments :: column_link('customer','Customer','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','total','Total')}" />
+						<th th:replace="~{fragments :: column_link('total','Total','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','orderTime','Order Time')}" />
+						<th th:replace="~{fragments :: column_link('orderTime','Order Time','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','destination','Destination')}" />
+						<th th:replace="~{fragments :: column_link('destination','Destination','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','paymentMethod','Payment Method')}" />
+						<th th:replace="~{fragments :: column_link('paymentMethod','Payment Method','none')}" />
 
-						<th th:replace="~{fragments :: column_link('/orders','orderStatus','Status')}" />
+						<th th:replace="~{fragments :: column_link('orderStatus','Status','none')}" />
 
 
 						<th></th>
@@ -48,7 +48,7 @@
 
 				<tbody>
 
-					<tr th:each="order : ${listOrders}">
+					<tr th:each="order : ${orders}">
 						<td th:text="${order.id}"></td>
 						<td>
 							<a class="linkCustomerDetail" th:href="@{'/orders/detial/'+${order.customer.id}}">
@@ -59,7 +59,7 @@
 							<div th:replace="~{orders/order_fragments :: format_currency(${order.total})}"></div>
 						</td>
 						<td>
-							<div th:replace="~{orders/order_fragments :: format_time(${order.orderTime})}"></div>
+							<div th:replace="~{orders/order_fragments :: format_time(${order.orderTime})}"></div> 
 						</td>
 
 						<td>[[${order.destination}]]</td>
@@ -76,7 +76,7 @@
 		</div>
 
 
-		<div th:replace="~{fragments :: pagination('/orders','orders')}"></div>
+		<div th:replace="~{fragments :: pagination('orders')}"></div>
 
 		<div class="modal fade" id="customerDetailModal">
 			<div class="modal-dialog modal-lg">

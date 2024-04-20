@@ -23,7 +23,7 @@
 
   <div th:fragment="search_form(moduleURL)">
 
-    <form th:action="@{${moduleURL}}" class="form-inline m-3">
+    <form th:action="@{${moduleURL}+'page/1'}" class="form-inline m-3">
 
       <input type="hidden" name="sortField" th:value="${sortField}" />
       <input type="hidden" name="sortOrder" tH:value="${sortOrder}" />

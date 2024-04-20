@@ -51,7 +51,7 @@ public class WebSecurityConfig {
 				.hasAnyAuthority("Admin", "Salesperson", "Editor")
 				.requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
 				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
-				.requestMatchers("/customers/**", "/orders/**").hasAnyAuthority("Admin", "Salesperson")
+				.requestMatchers("/customers/**", "/orders/**","/get_shipping_cost").hasAnyAuthority("Admin", "Salesperson")
 				.requestMatchers("/images/**", "/js/**", "/webjars/**")
 				.permitAll()
 				.anyRequest()
@@ -64,6 +64,10 @@ public class WebSecurityConfig {
 						.logoutUrl("/logout")
 						.logoutSuccessUrl("/login?logout")
 						.permitAll());
+
+						http
+						.headers()
+						.contentSecurityPolicy("frame-ancestors 'self'");
 
 		return http.build();
 	}

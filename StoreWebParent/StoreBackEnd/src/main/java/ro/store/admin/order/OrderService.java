@@ -1,5 +1,6 @@
 package ro.store.admin.order;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.springframework.data.domain.Page;
@@ -8,6 +9,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ro.store.admin.common.paging.PagingAndSortingHelper;
+import ro.store.admin.countries_states_backend.CountryRepository;
+import ro.store.common.entity.Country;
 import ro.store.common.entity.order.Order;
 
 @Service
@@ -15,9 +18,11 @@ public class OrderService {
 
   private static final int ORDERS_PER_PAGE = 10;
   private OrderRepository orderRepository;
+  private CountryRepository countryRepository;
 
-  public OrderService(OrderRepository orderRepository) {
+  public OrderService(OrderRepository orderRepository,CountryRepository countryRepository) {
     this.orderRepository = orderRepository;
+    this.countryRepository = countryRepository;
   }
 
   public void listByPage(int pageNum, PagingAndSortingHelper helper) {
@@ -66,5 +71,10 @@ public class OrderService {
     orderRepository.deleteById(id);
 
   }
+
+  public List<Country> listAllCountries(){
+    return countryRepository.findAllByOrderByNameAsc();
+  }
+
 
 }

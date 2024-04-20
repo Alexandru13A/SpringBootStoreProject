@@ -14,14 +14,14 @@ import ro.store.admin.common.paging.PagingAndSortingParam;
 import ro.store.admin.order.OrderNotFoundException;
 import ro.store.admin.order.OrderService;
 import ro.store.admin.setting.SettingService;
+import ro.store.common.entity.Country;
 import ro.store.common.entity.Setting.Setting;
 import ro.store.common.entity.order.Order;
 
 @Controller
 public class OrderController {
 
-  private String defaultRedirectURL = "redirect:/orders/page/1?sortField=orderTime&sortOrder=desc";
-
+  private String defaultRedirectURL = "redirect:/orders/page/1?sortField=orderTime&sortDir=asc";
   private OrderService orderService;
   private SettingService settingService;
 
@@ -38,7 +38,7 @@ public class OrderController {
 
   @GetMapping("/orders/page/{pageNum}")
   public String listByPage(
-      @PagingAndSortingParam(listName = "listOrders",moduleURL = "/orders") PagingAndSortingHelper helper,
+      @PagingAndSortingParam(listName = "orders", moduleURL = "/orders") PagingAndSortingHelper helper,
       @PathVariable(name = "pageNum") int pageNum, HttpServletRequest request) {
 
     orderService.listByPage(pageNum, helper);
@@ -82,7 +82,29 @@ public class OrderController {
       redirectAttributes.addFlashAttribute("message", e.getMessage());
     }
 
-    return "redirect:/orders";
+    return defaultRedirectURL;
+  }
+
+  @GetMapping("/orders/edit/{id}")
+  public String editOrder(
+      @PathVariable("id") Integer id, Model model, RedirectAttributes redirectAttributes,
+      HttpServletRequest request) {
+
+
+        try{
+          Order order = orderService.getOrderById(id);
+          List<Country> countries = orderService.listAllCountries();
+
+          model.addAttribute("pageTitle", "Edit order "+id);
+          model.addAttribute("order", order);
+          model.addAttribute("countries", countries);
+
+          return "orders/order_form";
+        }catch(OrderNotFoundException e){
+          redirectAttributes.addFlashAttribute("message",e.getMessage());
+          return defaultRedirectURL;
+        }
+
   }
 
 }

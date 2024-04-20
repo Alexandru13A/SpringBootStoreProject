@@ -31,11 +31,11 @@
     <table class="table table-bordered table-hover table-responsive-xl">
       <thead class="thead-dark">
         <tr>
-          <th th:replace="~{fragments :: column_link('id','ID','tag')}" />
+          <th th:replace="~{fragments :: column_link('id','ID','none')}" />
           <th>Principal Image</th>
           <th th:replace="~{fragments :: column_link('name','Product Name','none')}" />
-          <th th:replace="~{fragments :: column_link('brand','Brand','tag')}" />
-          <th th:replace="~{fragments :: column_link('category','Category','tag')}" />
+          <th th:replace="~{fragments :: column_link('brand','Brand','none')}" />
+          <th th:replace="~{fragments :: column_link('category','Category','none')}" />
 
           <th:block sec:authorize="hasAnyAuthority('Admin','Editor')">
             <th>Enabled</th>
