@@ -1,32 +1,37 @@
-$(document).ready(function () {
-  customizeDropDownMenu();
+$(document).ready(function() {
+	$("#logoutLink").on("click", function(e) {
+		e.preventDefault();
+		document.logoutForm.submit();
+	});
+	
+	customizeDropDownMenu();
+	customizeTabs();
 });
 
 function customizeDropDownMenu() {
-  $(".navigationbar .dropdown").hover(
-    function () {
-      $(this).find('.dropdown-menu').first().stop(true, true).delay(50).slideDown();
-    },
-    function () {
-      $(this).find('.dropdown-menu').first().stop(true, true).delay(50).slideUp();
-    });
+	$(".navigationbar .dropdown").hover(
+		function() {
+			$(this).find('.dropdown-menu').first().stop(true, true).delay(20).slideDown();
+		},
+		function() {
+			$(this).find('.dropdown-menu').first().stop(true, true).delay(10).slideUp();
+		}
+	);
+	
+	$(".dropdown > a").click(function() {
+		location.href = this.href;
+	});
+}
 
+function customizeTabs() {
+	// Javascript to enable link to tab
+	var url = document.location.toString();
+	if (url.match('#')) {
+	    $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
+	} 
 
-
-
-  $(".dropdown > a").click(function () {
-    location.href = this.href
-  });
-
-  const toggleBtn = document.querySelector('.toggle_btn')
-  const toggleBtnIcon = document.querySelector('.toggle_btn i')
-  const dropDownMenu = document.querySelector('.dropdown_menu')
-
-  toggleBtn.onclick = function () {
-    dropDownMenu.classList.toggle('open')
-    const isOpen = dropDownMenu.classList.contains('open')
-
-    toggleBtnIcon.classList = isOpen
-      ? 'fa-solid fa-xmark' : 'fa-solid fa-bars'
-  }
+	// Change hash for page-reload
+	$('.nav-tabs a').on('shown.bs.tab', function (e) {
+	    window.location.hash = e.target.hash;
+	})	
 }
