@@ -49,7 +49,7 @@ public class ShippingRateController {
   public String newRate(Model model) {
     List<Country> listCountries = shippingRateService.listAllCountries();
 
-    model.addAttribute("rate", new ShippingRate());
+    model.addAttribute("shippingRate", new ShippingRate());
     model.addAttribute("listCountries", listCountries);
     model.addAttribute("pageTitle", "New Rate");
 

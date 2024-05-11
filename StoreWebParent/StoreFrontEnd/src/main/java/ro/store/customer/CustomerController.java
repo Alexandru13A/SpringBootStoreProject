@@ -21,7 +21,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.security.CustomerUserDetails;
 import ro.store.security.oauth2.CustomerOAuth2User;
 import ro.store.setting.EmailSettingBag;

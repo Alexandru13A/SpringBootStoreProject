@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 
 @Entity
 @Table(name = "addresses")

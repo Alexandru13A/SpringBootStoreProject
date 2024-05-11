@@ -11,7 +11,7 @@ import ro.store.address.AddressService;
 import ro.store.common.entity.Address;
 import ro.store.common.entity.CartItem;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.customer.CustomerService;
 import ro.store.shipping.ShippingRateService;
 import ro.store.utility.Utility;

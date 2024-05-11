@@ -10,8 +10,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ro.store.common.entity.Customer.AuthenticationType;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.AuthenticationType;
+import ro.store.common.entity.customer.Customer;
 import ro.store.customer.CustomerService;
 
 @Component

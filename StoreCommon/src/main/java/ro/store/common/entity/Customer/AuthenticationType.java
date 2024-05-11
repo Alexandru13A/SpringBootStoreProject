@@ -1,4 +1,4 @@
-package ro.store.common.entity.Customer;
+package ro.store.common.entity.customer;
 
 public enum AuthenticationType {
 

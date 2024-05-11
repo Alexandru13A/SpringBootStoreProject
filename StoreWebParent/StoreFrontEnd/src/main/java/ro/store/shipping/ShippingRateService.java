@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import ro.store.common.entity.Address;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 
 @Service
 public class ShippingRateService {

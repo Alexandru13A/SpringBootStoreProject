@@ -43,15 +43,16 @@ public class WebSecurityConfig {
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.authorizeHttpRequests((requests) -> requests
+		    .requestMatchers("/orders_shipper/update/**").hasAuthority("Shipper")
+				.requestMatchers("/states/list_by_country/**").hasAnyAuthority("Admin", "Salesperson")
 				.requestMatchers("/users/**", "/settings/**", "/countries/**", "/states/**").hasAuthority("Admin")
 				.requestMatchers("/categories/**", "/brands/**").hasAnyAuthority("Admin", "Editor")
-				.requestMatchers("/products", "/products/", "products/detail/**", "/products/page/**")
-				.hasAnyAuthority("Admin", "Salesperson", "Editor", "Shipper")
-				.requestMatchers("/products/edit/**", "/products/save", "/products/check_unique")
-				.hasAnyAuthority("Admin", "Salesperson", "Editor")
+				.requestMatchers("/products", "/products/", "products/detail/**", "/products/page/**").hasAnyAuthority("Admin", "Salesperson", "Editor", "Shipper")
+				.requestMatchers("/products/edit/**", "/products/save", "/products/check_unique").hasAnyAuthority("Admin", "Salesperson", "Editor")
+				.requestMatchers("/orders", "/orders/", "/orders/page/**", "/orders/detail/**").hasAnyAuthority("Admin", "Salesperson", "Shipper")
 				.requestMatchers("/products/new", "/products/delete/**").hasAnyAuthority("Admin", "Editor")
 				.requestMatchers("/products/**").hasAnyAuthority("Admin", "Editor")
-				.requestMatchers("/customers/**", "/orders/**","/get_shipping_cost").hasAnyAuthority("Admin", "Salesperson")
+				.requestMatchers("/customers/**", "/orders/**", "/get_shipping_cost").hasAnyAuthority("Admin", "Salesperson")
 				.requestMatchers("/images/**", "/js/**", "/webjars/**")
 				.permitAll()
 				.anyRequest()
@@ -65,9 +66,9 @@ public class WebSecurityConfig {
 						.logoutSuccessUrl("/login?logout")
 						.permitAll());
 
-						http
-						.headers()
-						.contentSecurityPolicy("frame-ancestors 'self'");
+		http
+				.headers()
+				.contentSecurityPolicy("frame-ancestors 'self'");
 
 		return http.build();
 	}

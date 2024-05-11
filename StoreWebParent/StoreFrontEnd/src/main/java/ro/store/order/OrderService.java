@@ -4,20 +4,27 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import ro.store.checkout.CheckoutInfo;
 import ro.store.common.entity.Address;
 import ro.store.common.entity.CartItem;
-import ro.store.common.entity.Customer.Customer;
 import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.entity.order.Order;
 import ro.store.common.entity.order.OrderDetail;
 import ro.store.common.entity.order.OrderStatus;
+import ro.store.common.entity.order.OrderTrack;
 import ro.store.common.entity.order.PaymentMethod;
 
 @Service
 public class OrderService {
+
+  public static final int ORDERS_PER_PAGE =5;
 
   private OrderRepository orderRepository;
 
@@ -30,7 +37,13 @@ public class OrderService {
 
     Order order = new Order();
     order.setOrderTime(new Date());
-    order.setOrderStatus(OrderStatus.NEW);
+
+    if(paymentMethod.equals(PaymentMethod.PAYPAL)){
+      order.setOrderStatus(OrderStatus.PAID);
+    }else{
+      order.setOrderStatus(OrderStatus.NEW);
+    }
+
     order.setCustomer(customer);
     order.setProductCost(checkoutInfo.getProductCost());
     order.setSubtotal(checkoutInfo.getProductTotal());
@@ -65,9 +78,36 @@ public class OrderService {
 
     }
 
+    OrderTrack track = new OrderTrack();
+		track.setOrder(order);
+		track.setStatus(OrderStatus.NEW);
+		track.setNotes(OrderStatus.NEW.defaultDescription());
+		track.setUpdatedTime(new Date());
+		
+		order.getOrderTracks().add(track);
+
 
     return orderRepository.save(order);
 
+  }
+
+  public Page<Order> listOrdersForCustomerByPage(Customer customer,int pageNum,String sortField,String sortDir, String keyword){
+
+    Sort sort = Sort.by(sortField);
+    sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
+
+    Pageable pageable = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE,sort);
+
+    if(keyword != null){
+      orderRepository.findAll(keyword,customer.getId(),pageable);
+    }
+
+    return orderRepository.findAll(customer.getId(), pageable);
+    
+  }
+
+  public Order getOrder(Integer id , Customer customer){
+    return orderRepository.findByIdAndCustomer(id, customer);
   }
 
 }

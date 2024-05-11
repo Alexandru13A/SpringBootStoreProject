@@ -110,6 +110,19 @@ header {
   position: absolute;
 }
 
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+.dropdown-menu:hover {
+  display: block;
+}
+
+
 .dropdown_menu {
   margin-top: 10px;
   display: none;

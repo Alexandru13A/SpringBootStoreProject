@@ -1,5 +1,6 @@
 package ro.store.admin.order;
 
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -12,6 +13,8 @@ import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.common.entity.Country;
 import ro.store.common.entity.order.Order;
+import ro.store.common.entity.order.OrderStatus;
+import ro.store.common.entity.order.OrderTrack;
 
 @Service
 public class OrderService {
@@ -75,6 +78,36 @@ public class OrderService {
   public List<Country> listAllCountries(){
     return countryRepository.findAllByOrderByNameAsc();
   }
+
+  public void save(Order orderInForm) {
+		Order orderInDB = orderRepository.findById(orderInForm.getId()).get();
+		orderInForm.setOrderTime(orderInDB.getOrderTime());
+		orderInForm.setCustomer(orderInDB.getCustomer());
+		
+		orderRepository.save(orderInForm);
+	}	
+	
+	public void updateStatus(Integer orderId, String status) {
+		Order orderInDB = orderRepository.findById(orderId).get();
+		OrderStatus statusToUpdate = OrderStatus.valueOf(status);
+		
+		if (!orderInDB.hasStatus(statusToUpdate)) {
+			List<OrderTrack> orderTracks = orderInDB.getOrderTracks();
+			
+			OrderTrack track = new OrderTrack();
+			track.setOrder(orderInDB);
+			track.setStatus(statusToUpdate);
+			track.setUpdatedTime(new Date());
+			track.setNotes(statusToUpdate.defaultDescription());
+			
+			orderTracks.add(track);
+			
+			orderInDB.setOrderStatus(statusToUpdate);
+			
+			orderRepository.save(orderInDB);
+		}
+		
+	}
 
 
 }

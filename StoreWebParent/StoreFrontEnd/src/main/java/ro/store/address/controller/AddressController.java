@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import ro.store.address.AddressService;
 import ro.store.common.entity.Address;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.countries_states_frontend.CountryRepository;
 import ro.store.customer.CustomerService;
 import ro.store.utility.Utility;

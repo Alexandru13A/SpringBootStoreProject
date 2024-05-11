@@ -10,8 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.bytebuddy.utility.RandomString;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.AuthenticationType;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.AuthenticationType;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.exception.customer.CustomerNotFoundException;
 import ro.store.countries_states_frontend.CountryRepository;
 

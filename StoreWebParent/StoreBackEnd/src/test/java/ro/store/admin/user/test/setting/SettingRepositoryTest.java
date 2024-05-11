@@ -30,7 +30,7 @@ public class SettingRepositoryTest {
     Setting siteLogo = new Setting("SITE_LOGO", "Store.png", SettingCategory.GENERAL);
     Setting copyright = new Setting("COPYRIGHT", "Copyright (C) 2023 Store Ltd.", SettingCategory.GENERAL);
 
-    repository.saveAll(List.of(siteLogo, copyright));
+    repository.saveAll(List.of(siteName,siteLogo, copyright));
     Iterable<Setting> iterable = repository.findAll();
     assertThat(iterable).size().isGreaterThan(0);
   }

@@ -54,7 +54,7 @@
           <div class="dropdown-menu" style="height: 240px; max-width: 150px;">
             <a class="a dropdown-item" th:href="@{/address_book}">Address</a>
             <a class="a dropdown-item" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/></a>
-            <a class="a dropdown-item" href="#">Orders</a>
+            <a class="a dropdown-item" th:href="@{/orders}">Orders</a>
             <a class="a dropdown-item" href="#">Reviews</a>
             <a class="a dropdown-item" href="#">Questions</a>
             <hr>
@@ -97,7 +97,7 @@
 
         <li class="li"><a class="a" th:href="@{/address_book}">Addresses</a></li>
         <li class="li"><a class="a" th:href="@{/cart}">Cart <img th:src="@{/images/buttons/cart.png}" style="max-width: 20px;max-height: 20px;"/> </a></li>
-        <li class="li"><a class="a" href="#">Orders</a></li>
+        <li class="li"><a class="a" th:href="@{/orders}">Orders</a></li>
         <li class="li"><a class="a" href="#">Reviews</a></li>
         <li class="li"><a class="a" href="#">Questions</a></li>
         <hr>
@@ -111,6 +111,17 @@
 
 
     <script th:src="@{/js/logout.js}"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+      const toggleBtn = document.querySelector('.toggle_btn');
+      const dropdownMenu = document.querySelector('.dropdown_menu');
+  
+      toggleBtn.addEventListener('click', () => {
+        toggleBtn.classList.toggle('active');
+        dropdownMenu.classList.toggle('open'); 
+      });
+    });
+      </script>
   </header>
 
   <div th:fragment="search_nav" class="navigationbar">

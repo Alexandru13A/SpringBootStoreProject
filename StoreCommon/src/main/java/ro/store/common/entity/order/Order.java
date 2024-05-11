@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import ro.store.common.entity.Address;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 
 @Entity
 @Table(name = "orders")
@@ -193,6 +193,23 @@ public class Order  {
 		if (lastName != null && !lastName.isEmpty()) name += " " + lastName;
 		return name;
 	}
+
+  @Transient
+	public String getRecipientAddress() {
+		String address = address1;
+		
+		if (address2 != null && !address2.isEmpty()) address += ", " + address2;
+		
+		if (!city.isEmpty()) address += ", " + city;
+		
+		if (state != null && !state.isEmpty()) address += ", " + state;
+		
+		address += ", " + country;
+		
+		if (!postalCode.isEmpty()) address += ". " + postalCode;
+		
+		return address;
+	}	
 	
 
 	

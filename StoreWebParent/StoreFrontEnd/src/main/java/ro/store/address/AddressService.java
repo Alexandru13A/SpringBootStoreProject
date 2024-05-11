@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ro.store.common.entity.Address;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.customer.CustomerService;
 
 @Service

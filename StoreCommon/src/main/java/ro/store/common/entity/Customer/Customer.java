@@ -1,4 +1,4 @@
-package ro.store.common.entity.Customer;
+package ro.store.common.entity.customer;
 
 import java.util.Date;
 

@@ -14,7 +14,7 @@ import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.common.paging.PagingAndSortingParam;
 import ro.store.admin.customer.CustomerService;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.exception.customer.CustomerNotFoundException;
 
 @Controller

@@ -11,7 +11,7 @@ import jakarta.transaction.Transactional;
 import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.exception.customer.CustomerNotFoundException;
 
 @Service

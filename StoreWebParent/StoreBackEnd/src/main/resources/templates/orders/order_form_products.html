@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <body>
-
     <div th:fragment="content" th:remove="tag">
         <div id="productList">
 
@@ -49,8 +48,7 @@
                                 <td>Unit Price:</td>
                                 <td>
                                     <input type="text" required class="form-control m-1 price-input" name="productPrice"
-                                        th:id="'price' + ${status.count}" 
-                                        th:rowNumber="${status.count}"
+                                        th:id="'price' + ${status.count}" th:rowNumber="${status.count}"
                                         th:value="${detail.unitPrice}" style="max-width: 140px" />
                                 </td>
                             </tr>
@@ -58,8 +56,7 @@
                                 <td>Subtotal:</td>
                                 <td>
                                     <input type="text" readonly="readonly" class="form-control m-1 subtotal-output"
-                                        name="productSubtotal" 
-                                        th:id="'subtotal' + ${status.count}"
+                                        name="productSubtotal" th:id="'subtotal' + ${status.count}"
                                         th:value="${detail.subtotal}" style="max-width: 140px" />
                                 </td>
                             </tr>
@@ -67,8 +64,7 @@
                                 <td>Shipping Cost:</td>
                                 <td>
                                     <input type="text" required class="form-control m-1 ship-input"
-                                        name="productShipCost" 
-                                        th:value="${detail.shippingCost}"
+                                        name="productShipCost" th:value="${detail.shippingCost}"
                                         style="max-width: 140px" />
                                 </td>
                             </tr>
@@ -83,6 +79,3 @@
 
         <a th:href="@{/orders/search_product}" id="linkAddProduct" class="btn btn-success">Add a Product</a>
     </div>
-</body>
-
-</html>

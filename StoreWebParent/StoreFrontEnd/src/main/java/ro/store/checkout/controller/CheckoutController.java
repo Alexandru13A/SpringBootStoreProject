@@ -18,10 +18,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import ro.store.address.AddressService;
 import ro.store.checkout.CheckoutInfo;
 import ro.store.checkout.CheckoutService;
+import ro.store.checkout.paypal.PayPalApiException;
+import ro.store.checkout.paypal.PayPalService;
 import ro.store.common.entity.Address;
 import ro.store.common.entity.CartItem;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.entity.order.Order;
 import ro.store.common.entity.order.PaymentMethod;
 import ro.store.customer.CustomerService;
@@ -44,10 +46,11 @@ public class CheckoutController {
   private final ShoppingCartService shoppingCartService;
   private final OrderService orderService;
   private final SettingService settingService;
+  private final PayPalService payPalService;
 
   public CheckoutController(CheckoutService checkoutService, CustomerService customerService,
       AddressService addressService, ShippingRateService shippingRateService, ShoppingCartService shoppingCartService,
-      OrderService orderService, SettingService settingService) {
+      OrderService orderService, SettingService settingService,PayPalService payPalService) {
     this.checkoutService = checkoutService;
     this.customerService = customerService;
     this.addressService = addressService;
@@ -55,6 +58,7 @@ public class CheckoutController {
     this.shoppingCartService = shoppingCartService;
     this.orderService = orderService;
     this.settingService = settingService;
+    this.payPalService = payPalService;
   }
 
   // Checkout Page
@@ -85,6 +89,7 @@ public class CheckoutController {
     PaymentSettingBag paymentSettingBag = settingService.getPaymentSettings();
     String paypalClientId = paymentSettingBag.getClientID();
 
+    
     model.addAttribute("customer", customer);
     model.addAttribute("paypalClientId", paypalClientId);
     model.addAttribute("currencyCode", currencyCode);
@@ -165,4 +170,30 @@ public class CheckoutController {
     mailSender.send(message);
 
   }
+
+  @PostMapping("/process_paypal_order")
+	public String processPayPalOrder(HttpServletRequest request, Model model) 
+			throws UnsupportedEncodingException, MessagingException {
+		String orderId = request.getParameter("orderId");
+		
+		String pageTitle = "Checkout Failure";
+		String message = null;
+		
+		try {
+			if (payPalService.validateOrder(orderId)) {
+				return placeOrder(request);
+			} else {
+				pageTitle = "Checkout Failure";
+				message = "ERROR: Transaction could not be completed because order information is invalid";
+			}
+		} catch (PayPalApiException e) {
+			message = "ERROR: Transaction failed due to error: " + e.getMessage();
+		}
+		
+		model.addAttribute("pageTitle", pageTitle);
+		model.addAttribute("title", pageTitle);
+		model.addAttribute("message", message);
+		
+		return "message";
+	}
 }

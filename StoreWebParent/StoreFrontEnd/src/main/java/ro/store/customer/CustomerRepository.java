@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import ro.store.common.entity.Customer.AuthenticationType;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.AuthenticationType;
+import ro.store.common.entity.customer.Customer;
 
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {

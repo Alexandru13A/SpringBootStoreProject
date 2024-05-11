@@ -12,12 +12,14 @@ import lombok.ToString;
 @Setter
 @ToString
 public class CheckoutInfo {
-  private float productCost;
-  private float productTotal;
-  private float shippingCostTotal;
-  private float paymentTotalForOrder;
-  private int deliverDays;
-  private boolean codSupported;
+
+ private float productCost;
+	private float productTotal;
+	private float shippingCostTotal;
+	private float paymentTotalForOrder;
+	private int deliverDays;
+	private boolean codSupported;
+
 
 
 
@@ -28,7 +30,7 @@ public class CheckoutInfo {
   }
 
   public String getPaymentTotalForPayPal(){
-    DecimalFormat formatter  = new DecimalFormat("###,###.##");
+    DecimalFormat formatter  = new DecimalFormat("##.##");
     return formatter.format(paymentTotalForOrder);
   }
   

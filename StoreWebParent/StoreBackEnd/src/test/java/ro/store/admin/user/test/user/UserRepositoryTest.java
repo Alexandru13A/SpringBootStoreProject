@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.Rollback;
 
 import ro.store.admin.user.UserRepository;
@@ -26,13 +27,14 @@ public class UserRepositoryTest {
 	@Autowired
 	private UserRepository repo;
 
+
 	@Autowired
 	private TestEntityManager entityManager;
 
 	@Test
 	public void testCreateUserWithOneRole() {
 		Role roleAdmin = entityManager.find(Role.class, 1);
-		User user = new User("alex@gmail.com", "alex1234", "Alexandru", "Pacioianu");
+		User user = new User("alex@gmail.com", "Alex1234", "Alexandru", "Pacioianu");
 		user.addRole(roleAdmin);
 
 		User savedUser = repo.save(user);
@@ -41,9 +43,23 @@ public class UserRepositoryTest {
 	}
 
 	@Test
+	public void encryptPassword(){
+		String email = "admin@gmail.com";
+		User user = repo.getUserByEmail(email);
+
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		String password = user.getPassword();
+		user.setPassword(passwordEncoder.encode(password));
+
+		repo.save(user);
+	
+
+	}
+
+	@Test
 	public void testCreateUserWithTwoRoles() {
 
-		User userTwo = new User("bogdan@fmail.com", "bogdan2020", "Bogdan", "Mihai");
+		User userTwo = new User("bogdan@gmail.com", "bogdan2020", "Bogdan", "Mihai");
 		Role roleEditor = new Role(3);
 		Role roleAssistant = new Role(5);
 		userTwo.addRole(roleEditor);

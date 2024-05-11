@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import ro.store.common.entity.CartItem;
-import ro.store.common.entity.Customer.Customer;
 import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.customer.Customer;
 
 public interface CartItemRepository extends JpaRepository<CartItem, Integer> {
 

@@ -1,9 +1,9 @@
 package ro.store.admin.product.Controller;
 
+import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ro.store.admin.product.ProductDTO;
@@ -21,7 +21,7 @@ public class ProductRestController {
   }
 
   @PostMapping("/products/check_unique")
-  public String checkForUniqueName( @RequestParam("id") Integer id,@RequestParam("name") String name) {
+  public String checkForUniqueName( @Param("id") Integer id,@Param("name") String name) {
     return service.checkForUniqueName(id, name);
   }
 

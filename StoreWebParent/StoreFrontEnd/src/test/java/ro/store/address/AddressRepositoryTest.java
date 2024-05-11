@@ -11,7 +11,7 @@ import org.springframework.test.annotation.Rollback;
 
 import ro.store.common.entity.Address;
 import ro.store.common.entity.Country;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

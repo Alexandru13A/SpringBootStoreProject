@@ -14,8 +14,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import ro.store.admin.order.OrderRepository;
-import ro.store.common.entity.Customer.Customer;
 import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.customer.Customer;
 import ro.store.common.entity.order.Order;
 import ro.store.common.entity.order.OrderDetail;
 import ro.store.common.entity.order.OrderStatus;
@@ -86,7 +86,7 @@ public class OrderRepositoryTest {
 
   @Test
   public void testUpdateOrderTracks() {
-    Integer orderId = 8;
+    Integer orderId = 2;
     Order order = orderRepository.findById(orderId).get();
 
     OrderTrack newTrack = new OrderTrack();

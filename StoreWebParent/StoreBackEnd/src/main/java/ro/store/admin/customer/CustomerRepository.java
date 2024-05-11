@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import ro.store.admin.common.paging.SearchRepository;
-import ro.store.common.entity.Customer.Customer;
+import ro.store.common.entity.customer.Customer;
 
 public interface CustomerRepository extends SearchRepository<Customer,Integer> {
 

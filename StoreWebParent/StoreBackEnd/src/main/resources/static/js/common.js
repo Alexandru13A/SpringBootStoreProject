@@ -11,10 +11,10 @@ $(document).ready(function() {
 function customizeDropDownMenu() {
 	$(".navbar .dropdown").hover(
 		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(100).slideDown();
+			$(this).find('.dropdown_menu').first().stop(true, true).delay(100).slideDown();
 		},
 		function() {
-			$(this).find('.dropdown-menu').first().stop(true, true).delay(50).slideUp();
+			$(this).find('.dropdown_menu').first().stop(true, true).delay(50).slideUp();
 		}
 	);
 	

@@ -107,17 +107,50 @@
     </div>
 
     <div class="dropdown_menu">
-      <li class="li"><a class="a" th:href="@{/users}">Users</a></li>
-      <li class="li"><a class="a" th:href="@{/categories}">Categories</a></li>
-      <li class="li"><a class="a" th:href="@{/brands}">Brands</a></li>
-      <li class="li"><a class="a" th:href="@{/products}">Products</a></li>
-      <li class="li"><a class="a" th:href="@{/customers}">Customers</a></li>
-      <li class="li"><a class="a" th:href="@{/shipping}">Shipping</a></li>
-      <li class="li"><a class="a" th:href="@{/orders}">Orders</a></li>
-      <li class="li"><a class="a" th:href="@{/report}">Sales Report</a></li>
-      <li class="li"><a class="a" th:href="@{/articles}">Articles</a></li>
-      <li class="li"><a class="a" th:href="@{/menus}">Menus</a></li>
-      <li class="li"><a class="a" th:href="@{/settings}">Settings</a></li>
+      <th:block sec:authorize="hasAnyAuthority('Admin')">
+        <li class="li"><a class="a" th:href="@{/users}">Users</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
+        <li class="li"><a class="a" th:href="@{/categories}">Categories</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
+        <li class="li"><a class="a" th:href="@{/brands}">Brands</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor','Shipper','Salesperson')">
+        <li class="li"><a class="a" th:href="@{/products}">Products</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Salesperson')">
+        <li class="li"><a class="a" th:href="@{/customers}">Customers</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Salesperson')">
+        <li class="li"><a class="a" th:href="@{/shipping}">Shipping</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Salesperson','Shipper')">
+        <li class="li"><a class="a" th:href="@{/orders}">Orders</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Salesperson')">
+        <li class="li"><a class="a" th:href="@{/report}">Sales Report</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
+        <li class="li"><a class="a" th:href="@{/articles}">Articles</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin' ,'Editor')">
+        <li class="li"><a class="a" th:href="@{/menus}">Menus</a></li>
+      </th:block>
+
+      <th:block sec:authorize="hasAnyAuthority('Admin')">
+        <li class="li"><a class="a" th:href="@{/settings}">Settings</a></li>
+      </th:block>
+
       <li class="li">
         <img th:src="@{/images/site/user.png}" style="max-width: 35px; max-height: 35px;" />
         <a style="color: black;" class="a" th:href="@{/account}" sec:authentication="principal.fullName"></a>
@@ -128,6 +161,18 @@
     </div>
 
     <script th:src="@{/js/logout.js}"></script>
+    <script th:src="@{/js/common.js}"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        const toggleBtn = document.querySelector('.toggle_btn');
+        const dropdownMenu = document.querySelector('.dropdown_menu');
+
+        toggleBtn.addEventListener('click', () => {
+          toggleBtn.classList.toggle('active');
+          dropdownMenu.classList.toggle('open');
+        });
+      });
+    </script>
   </header>
 
 </body>
