@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ro.store.admin.product.ProductDTO;
 import ro.store.admin.product.ProductService;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.product.ProductNotFoundException;
 
 @RestController

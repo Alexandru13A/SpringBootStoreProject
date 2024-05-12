@@ -15,6 +15,7 @@ import ro.store.customer.CustomerService;
 import ro.store.order.OrderService;
 import ro.store.utility.Utility;
 
+
 @Controller
 public class OrderController {
 
@@ -61,6 +62,19 @@ public class OrderController {
 
     return "orders/orders_customer";
   }
+
+  @GetMapping("/orders/detail/{id}")
+  public String getOrderDetails(@PathVariable(name="id")Integer id,Model model, HttpServletRequest request) {
+
+    Customer customer = getAuthenticatedCustomer(request);
+
+    Order order = orderService.getOrder(id, customer);
+
+    model.addAttribute("order", order);
+
+    return "orders/order_details_modal";
+  }
+  
 
   public Customer getAuthenticatedCustomer(HttpServletRequest request) {
     String email = Utility.getEmailOfAuthenticatedCustomer(request);

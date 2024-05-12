@@ -12,8 +12,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.annotation.Rollback;
 
 import ro.store.common.entity.CartItem;
-import ro.store.common.entity.Product.Product;
 import ro.store.common.entity.customer.Customer;
+import ro.store.common.entity.product.Product;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = Replace.NONE)

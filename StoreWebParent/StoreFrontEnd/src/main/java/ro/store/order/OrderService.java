@@ -13,18 +13,19 @@ import org.springframework.stereotype.Service;
 import ro.store.checkout.CheckoutInfo;
 import ro.store.common.entity.Address;
 import ro.store.common.entity.CartItem;
-import ro.store.common.entity.Product.Product;
 import ro.store.common.entity.customer.Customer;
 import ro.store.common.entity.order.Order;
 import ro.store.common.entity.order.OrderDetail;
 import ro.store.common.entity.order.OrderStatus;
 import ro.store.common.entity.order.OrderTrack;
 import ro.store.common.entity.order.PaymentMethod;
+import ro.store.common.entity.product.Product;
+import ro.store.common.exception.order.OrderNotFoundException;
 
 @Service
 public class OrderService {
 
-  public static final int ORDERS_PER_PAGE =5;
+  public static final int ORDERS_PER_PAGE = 5;
 
   private OrderRepository orderRepository;
 
@@ -32,15 +33,17 @@ public class OrderService {
     this.orderRepository = orderRepository;
   }
 
+
+  //PLACE AN ORDER
   public Order createOrder(Customer customer, Address address, List<CartItem> cartItems, PaymentMethod paymentMethod,
       CheckoutInfo checkoutInfo) {
 
     Order order = new Order();
     order.setOrderTime(new Date());
 
-    if(paymentMethod.equals(PaymentMethod.PAYPAL)){
+    if (paymentMethod.equals(PaymentMethod.PAYPAL)) {
       order.setOrderStatus(OrderStatus.PAID);
-    }else{
+    } else {
       order.setOrderStatus(OrderStatus.NEW);
     }
 
@@ -53,16 +56,16 @@ public class OrderService {
     order.setPaymentMethod(paymentMethod);
     order.setDeliverDays(checkoutInfo.getDeliverDays());
     order.setDeliverDate(checkoutInfo.getDeliverDate());
-    
-    if(address == null){
+
+    if (address == null) {
       order.copyAddressFromCustomer();
-    }else{
+    } else {
       order.copyShippingAddress(address);
     }
 
     Set<OrderDetail> orderDetails = order.getOrderDetails();
 
-    for(CartItem cartItem : cartItems){
+    for (CartItem cartItem : cartItems) {
       Product product = cartItem.getProduct();
 
       OrderDetail orderDetail = new OrderDetail();
@@ -70,7 +73,7 @@ public class OrderService {
       orderDetail.setProduct(product);
       orderDetail.setQuantity(cartItem.getQuantity());
       orderDetail.setUnitPrice(product.getDiscountPrice());
-      orderDetail.setProductCost(product.getCost()* cartItem.getQuantity());
+      orderDetail.setProductCost(product.getCost() * cartItem.getQuantity());
       orderDetail.setSubtotal(cartItem.getSubtotal());
       orderDetail.setShippingCost(cartItem.getShippingCost());
 
@@ -79,35 +82,69 @@ public class OrderService {
     }
 
     OrderTrack track = new OrderTrack();
-		track.setOrder(order);
-		track.setStatus(OrderStatus.NEW);
-		track.setNotes(OrderStatus.NEW.defaultDescription());
-		track.setUpdatedTime(new Date());
-		
-		order.getOrderTracks().add(track);
+    track.setOrder(order);
+    track.setStatus(OrderStatus.NEW);
+    track.setNotes(OrderStatus.NEW.defaultDescription());
+    track.setUpdatedTime(new Date());
 
+    order.getOrderTracks().add(track);
 
     return orderRepository.save(order);
 
   }
 
-  public Page<Order> listOrdersForCustomerByPage(Customer customer,int pageNum,String sortField,String sortDir, String keyword){
+  //FRONT END CUSTOMER ORDERS
+  public Page<Order> listOrdersForCustomerByPage(Customer customer, int pageNum, String sortField, String sortDir,
+      String keyword) {
 
     Sort sort = Sort.by(sortField);
     sort = sortDir.equals("asc") ? sort.ascending() : sort.descending();
 
-    Pageable pageable = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE,sort);
+    Pageable pageable = PageRequest.of(pageNum - 1, ORDERS_PER_PAGE, sort);
 
-    if(keyword != null){
-      orderRepository.findAll(keyword,customer.getId(),pageable);
+    if (keyword != null) {
+      orderRepository.findAll(keyword, customer.getId(), pageable);
     }
 
     return orderRepository.findAll(customer.getId(), pageable);
-    
+
   }
 
-  public Order getOrder(Integer id , Customer customer){
+  //GET ORDER FROM DB
+  public Order getOrder(Integer id, Customer customer) {
     return orderRepository.findByIdAndCustomer(id, customer);
   }
 
+  //SET ORDER RETURN REQUEST
+  public void setOrderReturnRequested(OrderReturnRequest request, Customer customer)
+      throws OrderNotFoundException {
+
+    Order order = orderRepository.findByIdAndCustomer(request.getOrderId(), customer);
+
+    if (order == null) {
+      throw new OrderNotFoundException("Order ID " + request.getOrderId() + " not found");
+    }
+
+    if (order.isReturnRequested())
+      return;
+
+    OrderTrack orderTrack = new OrderTrack();
+
+    orderTrack.setOrder(order);
+    orderTrack.setUpdatedTime(new Date());
+    orderTrack.setStatus(OrderStatus.RETURN_REQUESTED);
+
+    String notes = "Reason: " + request.getReason();
+    if (!"".equals(request.getNote())) {
+      notes += ". " + request.getNote();
+    }
+
+    orderTrack.setNotes(notes);
+
+    order.getOrderTracks().add(orderTrack);
+    order.setOrderStatus(OrderStatus.RETURN_REQUESTED);
+
+    orderRepository.save(order);
+
+  }
 }

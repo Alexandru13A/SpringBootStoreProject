@@ -1,4 +1,4 @@
-package ro.store.common.entity.Product;
+package ro.store.common.entity.product;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -17,7 +17,7 @@ import ro.store.admin.product.ProductRepository;
 import ro.store.admin.shippingrate.ShippingRateRepository;
 import ro.store.admin.shippingrate.ShippingRateService;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.rate.ShippingRateNotFoundException;
 
 @ExtendWith(MockitoExtension.class)

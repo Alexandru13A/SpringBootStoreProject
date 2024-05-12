@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.product.ProductNotFoundException;
 
 @Service

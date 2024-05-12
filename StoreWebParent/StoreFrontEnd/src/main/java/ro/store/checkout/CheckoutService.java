@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 import ro.store.common.entity.CartItem;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 
 @Service
 public class CheckoutService {

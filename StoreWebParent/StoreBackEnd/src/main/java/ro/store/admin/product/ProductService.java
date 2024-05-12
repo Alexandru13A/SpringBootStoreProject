@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ro.store.admin.common.paging.PagingAndSortingHelper;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.product.ProductNotFoundException;
 
 @Service

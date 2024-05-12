@@ -24,7 +24,7 @@ import ro.store.admin.user.security.StoreUserDetails;
 import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.common.entity.Brand;
 import ro.store.common.entity.Category;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.product.ProductNotFoundException;
 
 @Controller

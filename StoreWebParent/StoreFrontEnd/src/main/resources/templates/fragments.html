@@ -17,6 +17,7 @@
 	<link rel="stylesheet" th:href="@{/css/navbar.css}" />
 	<link rel="stylesheet" th:href="@{/css/navbar_buttons.css}" />
 	<link rel="stylesheet" th:href="@{/css/footer.css}" />
+	<link rel="stylesheet" th:href="@{/css/style.css}" />
 
 
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
@@ -76,7 +77,7 @@
 		th:href="@{${moduleURL}+'/page/'+${pageNum}+'?sortField='+${sortField}+'&sortOrder='+${sortOrder}+${keyword != null ? '&keyword='+keyword :''}}">[[${label}]]</a>
 
 
-		
+
 	<div th:fragment="modal_dialog" class="modal fade text-center" id="modalDialog">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -117,14 +118,26 @@
 	</div>
 
 
-	 <div th:fragment="format_currency(amount)" th:remove="tag">
-      <span th:if="${CURRENCY_SYMBOL_POSITION =='Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(amount,1,THOUSANDS_POINT_TYPE,DECIMAL_DIGITS,DECIMAL_POINT_TYPE)}]]<span th:if="${CURRENCY_SYMBOL_POSITION =='After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
-    </div>
+	<div th:fragment="format_currency(amount)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION =='Before price'}"
+			th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(amount,1,THOUSANDS_POINT_TYPE,DECIMAL_DIGITS,DECIMAL_POINT_TYPE)}]]<span
+			th:if="${CURRENCY_SYMBOL_POSITION =='After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
 
-		<div th:fragment="price_fragment(productPrice)" th:remove="tag">
-			<span th:if="${CURRENCY_SYMBOL_POSITION =='Before price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(productPrice,1,THOUSANDS_POINT_TYPE,DECIMAL_DIGITS,DECIMAL_POINT_TYPE)}]]<span th:if="${CURRENCY_SYMBOL_POSITION =='After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
-		</div>
+	<div th:fragment="price_fragment(productPrice)" th:remove="tag">
+		<span th:if="${CURRENCY_SYMBOL_POSITION =='Before price'}"
+			th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>[[${#numbers.formatDecimal(productPrice,1,THOUSANDS_POINT_TYPE,DECIMAL_DIGITS,DECIMAL_POINT_TYPE)}]]<span
+			th:if="${CURRENCY_SYMBOL_POSITION =='After price'}" th:remove="tag">[[${CURRENCY_SYMBOL}]]</span>
+	</div>
+
+	<div th:fragment="format_time(dateTime)" th:remove="tag">
+		<span th:text="${#dates.format(dateTime, 'dd-MM-yyyy HH:mm:ss')}"></span>
+	</div>
 	
+	<div th:fragment="currency_input(amount)" th:remove="tag">
+		<input type="text" readonly class="form-control" th:value="${(CURRENCY_SYMBOL_POSITION == 'Before price' ? CURRENCY_SYMBOL : '') + #numbers.formatDecimal(amount, 1, THOUSANDS_POINT_TYPE, DECIMAL_DIGITS, DECIMAL_POINT_TYPE) + (CURRENCY_SYMBOL_POSITION == 'After price' ? CURRENCY_SYMBOL : '')}">
+	</div>	
+
 </body>
 
 </html>

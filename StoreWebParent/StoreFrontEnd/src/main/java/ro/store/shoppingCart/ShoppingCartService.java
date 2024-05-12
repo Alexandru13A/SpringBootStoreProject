@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ro.store.common.entity.CartItem;
-import ro.store.common.entity.Product.Product;
 import ro.store.common.entity.customer.Customer;
+import ro.store.common.entity.product.Product;
 import ro.store.product.ProductRepository;
 
 @Service

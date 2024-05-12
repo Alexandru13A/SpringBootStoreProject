@@ -12,8 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import ro.store.common.entity.Product.Product;
 import ro.store.common.entity.customer.Customer;
+import ro.store.common.entity.product.Product;
 
 @Entity
 @Table(name = "cart_item")

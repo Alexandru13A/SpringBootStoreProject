@@ -1,4 +1,4 @@
-package ro.store.common.entity.Product;
+package ro.store.common.entity.product;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

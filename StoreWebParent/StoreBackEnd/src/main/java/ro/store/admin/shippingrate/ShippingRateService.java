@@ -11,7 +11,7 @@ import ro.store.admin.countries_states_backend.CountryRepository;
 import ro.store.admin.product.ProductRepository;
 import ro.store.common.entity.Country;
 import ro.store.common.entity.ShippingRate;
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 import ro.store.common.exception.rate.ShippingRateAlreadyExistsException;
 import ro.store.common.exception.rate.ShippingRateNotFoundException;
 

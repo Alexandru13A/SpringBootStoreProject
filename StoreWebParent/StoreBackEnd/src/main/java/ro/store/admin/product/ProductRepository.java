@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-import ro.store.common.entity.Product.Product;
+import ro.store.common.entity.product.Product;
 
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
