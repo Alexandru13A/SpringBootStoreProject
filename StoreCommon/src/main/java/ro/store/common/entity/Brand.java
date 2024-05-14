@@ -16,6 +16,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.constants.Constants;
 
 @Entity
 @Table(name = "brands")
@@ -64,8 +65,17 @@ public class Brand {
     if (logo == null)
       return "/images/status/photo.png";
 
-    return "/brand-logos/" + this.id + "/" + this.logo;
+    return Constants.S3_BASE_URI+ "/brand-logos/" + this.id + "/" + this.logo;
   }
+
+  //BEFORE AWS
+  // @Transient
+  // public String getImagePath() {
+  //   if (logo == null)
+  //     return "/images/status/photo.png";
+
+  //   return "/brand-logos/" + this.id + "/" + this.logo;
+  // }
 
   @Override
   public String toString() {

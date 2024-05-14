@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import ro.store.admin.aws.AmazonS3Util;
 import ro.store.admin.brand.BrandNotFoundException;
 import ro.store.admin.brand.BrandService;
 import ro.store.admin.category.CategoryService;
@@ -29,7 +30,6 @@ public class BrandController {
   private BrandService brandService;
   private CategoryService catService;
 
-
   public BrandController(BrandService brandService, CategoryService catService) {
     this.brandService = brandService;
     this.catService = catService;
@@ -41,13 +41,12 @@ public class BrandController {
   }
 
   @GetMapping("/brands/page/{pageNum}")
-	public String listByPage(
-			@PagingAndSortingParam(listName = "brands", moduleURL = "/brands") PagingAndSortingHelper helper,
-			@PathVariable(name = "pageNum") int pageNum
-			) {
-		brandService.listBrandsByPage(pageNum, helper);
-		return "brands/brands";		
-	}
+  public String listByPage(
+      @PagingAndSortingParam(listName = "brands", moduleURL = "/brands") PagingAndSortingHelper helper,
+      @PathVariable(name = "pageNum") int pageNum) {
+    brandService.listBrandsByPage(pageNum, helper);
+    return "brands/brands";
+  }
 
   @GetMapping("/brands/new")
   public String newBrand(Model model) {
@@ -68,7 +67,12 @@ public class BrandController {
       brand.setLogo(fileName);
 
       Brand savedBrand = brandService.save(brand);
+
       String uploadDirectory = "brand-logos/" + savedBrand.getId();
+
+      AmazonS3Util.deleteFolder(uploadDirectory);
+      AmazonS3Util.uploadFile(uploadDirectory, fileName, multipartFile.getInputStream());
+
       FileUploadUtil.cleanDirectory(uploadDirectory);
       FileUploadUtil.saveFile(uploadDirectory, fileName, multipartFile);
     } else {
@@ -104,6 +108,10 @@ public class BrandController {
       brandService.delete(id);
       String brandDir = "/brand-logo/" + id;
       FileUploadUtil.removeDir(brandDir);
+      
+      String brandDirAWS = "brand-logo/" + id;
+      AmazonS3Util.deleteFolder(brandDirAWS);
+
       redirectAttributes.addFlashAttribute("message", "The Brand with ID: " + id + " has been deleted successfully");
 
     } catch (BrandNotFoundException e) {

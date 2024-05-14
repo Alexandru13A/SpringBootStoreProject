@@ -18,6 +18,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.constants.Constants;
 
 @Entity
 @Table(name = "users")
@@ -77,13 +78,21 @@ public class User {
 				+ ", lastName=" + lastName + ", roles=" + roles + "]";
 	}
 
+	//BEFORE AWS
+	// @Transient
+	// public String getPhotoImagePath() {
+	// 	if (id == null || photo == null)
+	// 		return "/images/status/portrait.png";
+
+	// 	return "/user-photo/" + this.id + "/" + this.photo;
+	// }
+
 	@Transient
 	public String getPhotoImagePath() {
 		if (id == null || photo == null)
 			return "/images/status/portrait.png";
 
-		return "/user-photo/" + this.id + "/" + this.photo;
-
+		return Constants.S3_BASE_URI+ "/user-photo/" + this.id + "/" + this.photo;
 	}
 
 	public boolean hasRole(String roleName) {

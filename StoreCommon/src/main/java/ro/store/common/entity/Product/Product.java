@@ -23,6 +23,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import ro.store.common.constants.Constants;
 import ro.store.common.entity.Brand;
 import ro.store.common.entity.Category;
 
@@ -101,8 +102,18 @@ public class Product {
     if (id == null || mainImage == null)
       return "/images/status/photo.png";
 
-    return "/product-images/" + this.id + "/" + this.mainImage;
+    return Constants.S3_BASE_URI+ "/product-images/" + this.id + "/" + this.mainImage;
   }
+
+  //BEFORE AWS
+  // @Transient
+  // public String getMainImagePath() {
+
+  //   if (id == null || mainImage == null)
+  //     return "/images/status/photo.png";
+
+  //   return "/product-images/" + this.id + "/" + this.mainImage;
+  // }
 
   public void addExtraImage(String imageName) {
     this.images.add(new ProductImage(imageName, this));

@@ -14,11 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletResponse;
+import ro.store.admin.aws.AmazonS3Util;
 import ro.store.admin.common.paging.PagingAndSortingHelper;
 import ro.store.admin.common.paging.PagingAndSortingParam;
 import ro.store.admin.user.UserNotFoundException;
 import ro.store.admin.user.UserService;
-import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.admin.user.util.UserCsvExporter;
 import ro.store.admin.user.util.UserExcelExporter;
 import ro.store.common.entity.Role;
@@ -70,10 +70,18 @@ public class UserController {
 			user.setPhoto(fileName);
 			User savedUser = service.saveUser(user);
 
-			String uploadDir = "user-photo/" + savedUser.getId();
+			//SAVE USER PHOTO IN AWS S3 DATABASE
+			String uploadPhotoOnAWS = "user-photo/" + savedUser.getId();
+			AmazonS3Util.deleteFolder(uploadPhotoOnAWS);
+			AmazonS3Util.uploadFile(uploadPhotoOnAWS, fileName, multipartFile.getInputStream());
 
-			FileUploadUtil.cleanDirectory(uploadDir);
-			FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+			//SAVE USER PHOTO ON SERVER
+			// String uploadDir = "user-photo/" + savedUser.getId();
+			// FileUploadUtil.cleanDirectory(uploadDir);
+			// FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+
 		} else {
 			if (user.getPhoto().isEmpty())
 				user.setPhoto(null);
@@ -112,6 +120,10 @@ public class UserController {
 
 		try {
 			service.delete(id);
+			
+			String userPhotoPathAWS = "user-photo/"+id;
+			AmazonS3Util.deleteFolder(userPhotoPathAWS);
+
 			redirectAttributes.addFlashAttribute("message",
 					"The user with ID : " + id + " has been deleted successfully");
 		} catch (UserNotFoundException e) {

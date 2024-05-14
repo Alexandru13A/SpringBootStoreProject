@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletResponse;
+import ro.store.admin.aws.AmazonS3Util;
 import ro.store.admin.category.CategoryService;
 import ro.store.admin.category.util.CategoriesExportCsv;
 import ro.store.admin.category.util.CategoriesExportExcel;
@@ -94,8 +95,13 @@ public class CategoryController {
       Model model) {
     try {
       service.deleteCategory(id);
+
       String categoryDir = "/category-images/" + id;
       FileUploadUtil.removeDir(categoryDir);
+
+      String categoryDirAWS = "category-images/" + id;
+      AmazonS3Util.deleteFolder(categoryDirAWS);
+      
       redirectAttributes.addFlashAttribute("message",
           "The Category with ID :" + id + " has been deleted successfully");
 
@@ -128,6 +134,13 @@ public class CategoryController {
 
       Category savedCategory = service.saveCategory(category);
       String uploadDirectory = "category-images/" + savedCategory.getId();
+
+      //AWS DATABASE
+      AmazonS3Util.deleteFolder(uploadDirectory);
+      AmazonS3Util.uploadFile(uploadDirectory, fileName, multipartFile.getInputStream());
+
+      //SAVE ON SERVER
+      FileUploadUtil.cleanDirectory(uploadDirectory);
       FileUploadUtil.saveFile(uploadDirectory, fileName, multipartFile);
     } else {
       service.saveCategory(category);

@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
+import ro.store.admin.aws.AmazonS3Util;
 import ro.store.admin.currency.CurrencyRepository;
-import ro.store.admin.user.util.FileUploadUtil;
 import ro.store.common.entity.Currency;
 import ro.store.common.entity.Setting.GeneralSettingBag;
 import ro.store.common.entity.Setting.Setting;
@@ -43,6 +43,9 @@ public class SettingController {
       model.addAttribute(setting.getKey(), setting.getValue());
     }
 
+    // for aws and concatenate with html for Store logo
+    // model.addAttribute("S3_BASE_URI", Constants.S3_BASE_URI);
+
     return "settings/settings";
   }
 
@@ -67,9 +70,15 @@ public class SettingController {
       String value = "/site-logo/" + fileName;
       settingBag.updateSiteLogo(value);
 
-      String uploadDirectory = "site-logo/";
-      FileUploadUtil.cleanDirectory(uploadDirectory);
-      FileUploadUtil.saveFile(uploadDirectory, fileName, multipartFile);
+      // UPLOAD THE PHOTO FOR LOGO AT AWS S3 DATABASE SERVER
+      String uploadDirectoryForAWS = "site-logo";
+      AmazonS3Util.deleteFolder(uploadDirectoryForAWS);
+      AmazonS3Util.uploadFile(uploadDirectoryForAWS, fileName, multipartFile.getInputStream());
+
+      // UPLOAD THE PHOTO FOR LOGO AT THE SERVER
+      // String uploadDirectory = "site-logo/";
+      // FileUploadUtil.cleanDirectory(uploadDirectory);
+      // FileUploadUtil.saveFile(uploadDirectory, fileName, multipartFile);
     }
   }
 
@@ -125,7 +134,7 @@ public class SettingController {
 
     redirectAttributes.addFlashAttribute("message", "Payment settings have been saved");
 
-      return "redirect:/settings#payment";
+    return "redirect:/settings#payment";
   }
 
 }

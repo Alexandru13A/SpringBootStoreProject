@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.constants.Constants;
 
 @Entity
 @Table(name = "product_images")
@@ -41,7 +42,13 @@ public class ProductImage {
 
   @Transient
   public String getImagePath() {
-    return "/product-images/" + product.getId() + "/extras/" + this.name;
+    return Constants.S3_BASE_URI+ "/product-images/" + product.getId() + "/extras/" + this.name;
   }
+
+  //BEFORE AWS
+  // @Transient
+  // public String getImagePath() {
+  //   return "/product-images/" + product.getId() + "/extras/" + this.name;
+  // }
 
 }

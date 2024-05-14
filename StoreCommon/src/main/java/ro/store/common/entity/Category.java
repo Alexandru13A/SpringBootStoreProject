@@ -17,6 +17,7 @@ import jakarta.persistence.Transient;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import ro.store.common.constants.Constants;
 
 @Entity
 @Table(name = "categories")
@@ -114,9 +115,19 @@ public class Category {
     if (image == null)
       return "/images/status/photo.png";
 
-    return "/category-images/" + this.id + "/" + this.image;
+    return Constants.S3_BASE_URI+ "/category-images/" + this.id + "/" + this.image;
 
   }
+
+  //BEFORE AWS
+  // @Transient
+  // public String getImagePath() {
+  //   if (image == null)
+  //     return "/images/status/photo.png";
+
+  //   return "/category-images/" + this.id + "/" + this.image;
+
+  // }
 
   @Override
   public String toString() {

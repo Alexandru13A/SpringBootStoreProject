@@ -37,6 +37,9 @@ public class SettingFilter implements Filter {
       request.setAttribute(setting.getKey(), setting.getValue());
     });
 
+    //FOR AWS, needs modification in html navigation concatenate.
+    //request.setAttribute("S3_BASE_URI", Constants.S3_BASE_URI);
+
     chain.doFilter(request, response);
 
   }
